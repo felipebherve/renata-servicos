@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Valores · Renata Multi Serviços</title>
+<meta name="description" content="Como a Renata calcula o valor das corridas, da espera e do acompanhamento.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Figtree:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="a11y.css">
+<script src="a11y.js" defer></script>
+<style>
+/* Mesma paleta da página inicial. Uma coluna de leitura, tabela de preços e exemplo de cálculo. */
+:root {
+  --bg: #f5efe7; --bg-soft: #ece3d7; --ink: #2a221c; --ink-soft: #5b4f45;
+  --accent: #6e5641; --accent-ink: #fbf7f1; --line: #d3c6b5; --card: #fffdf9; --pend-bg: #f6e6c8; --pend: #c98a2b;
+  --font-display: "Libre Caslon Display", Georgia, serif;
+  --font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1d1814; --bg-soft: #26201b; --ink: #f1e9df; --ink-soft: #c4b6a7; --accent: #c9a882; --accent-ink: #1d1814;
+    --line: #4a3f35; --card: #2b241e; --pend-bg: #4a3a20; --pend: #e0aa55;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1d1814; --bg-soft: #26201b; --ink: #f1e9df; --ink-soft: #c4b6a7; --accent: #c9a882; --accent-ink: #1d1814;
+  --line: #4a3f35; --card: #2b241e; --pend-bg: #4a3a20; --pend: #e0aa55;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+::selection { background: var(--accent); color: var(--accent-ink); }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+.wrap { max-width: 860px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+header { border-bottom: 1px solid var(--line); }
+header .wrap { max-width: 1180px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 16px; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo svg { width: 40px; height: 40px; color: var(--accent); flex: none; }
+.logo-name { font-family: var(--font-display); font-size: 24px; letter-spacing: .06em; line-height: 1; display: block; }
+.logo-sub { font-size: 10px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; display: block; margin-top: 4px; color: var(--ink-soft); }
+.back { font-size: 15px; font-weight: 500; }
+
+main .wrap { padding-block: 36px 72px; display: grid; gap: 36px; }
+h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(34px, 5vw, 48px); line-height: 1.05; margin: 0 0 12px; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(24px, 3vw, 30px); line-height: 1.15; margin: 0 0 12px; }
+p { margin: 0; max-width: 64ch; }
+.lead { font-size: clamp(17px, 1.8vw, 19px); }
+.muted { color: var(--ink-soft); }
+section > p + p { margin-top: 12px; }
+
+.tabela-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--card); }
+table { width: 100%; border-collapse: collapse; font-size: 15.5px; }
+th, td { text-align: left; padding: 12px 16px; vertical-align: top; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+th { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); background: var(--bg-soft); }
+td:nth-child(2) { white-space: nowrap; font-weight: 600; font-variant-numeric: tabular-nums; }
+td small { display: block; color: var(--ink-soft); font-size: 14px; margin-top: 2px; }
+
+.rota { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; font-size: 15px; }
+.rota span { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
+.rota i { font-style: normal; color: var(--ink-soft); }
+
+.exemplo { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: grid; gap: 12px; }
+.exemplo table { font-size: 15px; }
+.exemplo td { padding: 6px 0; border: 0; }
+.exemplo td:nth-child(2) { text-align: right; padding-left: 12px; }
+.exemplo tr.total td { border-top: 1px solid var(--line); padding-top: 10px; font-weight: 700; font-size: 17px; }
+
+.aviso { background: var(--pend-bg); border: 1px solid var(--pend); border-radius: 16px; padding: 20px; display: grid; gap: 10px; }
+.aviso h2 { margin: 0; }
+.aviso ul { margin: 0; padding-left: 20px; display: grid; gap: 8px; max-width: 66ch; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 26px; border-radius: 999px; font-weight: 600; font-size: 15.5px; text-decoration: none; border: 1.5px solid var(--accent); background: var(--accent); color: var(--accent-ink); justify-self: start; }
+.btn:hover { filter: brightness(1.06); }
+
+@media (max-width: 520px) {
+  .back { display: none; }
+  th, td { padding: 10px 12px; }
+  .btn { justify-self: stretch; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="logo" href="index.html" aria-label="Renata Multi Serviços, página inicial">
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <circle cx="24" cy="24" r="22.5"/>
+        <path d="M9 29.5h30M11 29.5v-3.2c0-1 .5-1.9 1.4-2.3l4.1-1.9 3.7-4.3c.6-.7 1.5-1.1 2.4-1.1h6.6c1 0 1.9.5 2.5 1.2l3.4 4.3 2.9.9c1.2.4 2 1.5 2 2.8v3.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M17 22.1h19.6M24.6 17v5.1" stroke-linecap="round"/>
+        <circle cx="16.5" cy="30" r="2.6" fill="currentColor" stroke="none"/><circle cx="32.5" cy="30" r="2.6" fill="currentColor" stroke="none"/>
+      </svg>
+      <span><span class="logo-name">RENATA</span><span class="logo-sub">Multi Serviços</span></span>
+    </a>
+    <a class="back" href="index.html">← Voltar ao início</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <section>
+      <h1>Valores</h1>
+      <p class="lead">O valor de cada serviço é calculado na hora do agendamento. Você monta o trajeto, diz o que eu faço em cada parada e o site mostra uma previsão de custo antes de enviar o pedido. Eu confirmo o valor final junto com a reserva.</p>
+    </section>
+
+    <section aria-labelledby="t-tabela">
+      <h2 id="t-tabela">Tabela</h2>
+      <div class="tabela-wrap">
+        <table>
+          <thead><tr><th scope="col">Item</th><th scope="col">Valor</th></tr></thead>
+          <tbody>
+            <tr><td>Saída<small>Cada vez que eu saio de casa para atender você.</small></td><td>R$ 35</td></tr>
+            <tr><td>Deslocamento<small>Por km da rota completa (veja abaixo).</small></td><td>R$ 5,70/km</td></tr>
+            <tr><td>Espera no carro<small>Os primeiros 30 min de cada parada são grátis.</small></td><td>R$ 30/h</td></tr>
+            <tr><td>Acompanhamento<small>Consultas, fisioterapia, mercado, restaurante, lojas. Mínimo de 1 hora.</small></td><td>R$ 45/h</td></tr>
+            <tr><td>Pet de pequeno porte<small>Por trecho com o pet no carro.</small></td><td>+ R$ 20</td></tr>
+            <tr><td>Noite, domingo e feriado<small>Saída a partir das 20h ou antes das 6h, domingos e feriados.</small></td><td>+ 20%</td></tr>
+            <tr><td>Pacotão 8 horas<small>Fico com você o dia todo, com até 100 km incluídos. Km extra: R$ 2,50.</small></td><td>R$ 850</td></tr>
+            <tr><td>Mudança de trajeto no dia<small>Taxa fixa, mais os km e o tempo a mais (veja abaixo).</small></td><td>+ R$ 25</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-rota">
+      <h2 id="t-rota">Como eu conto os km</h2>
+      <p>O deslocamento conta a rota inteira: saio da minha casa, na Hípica, busco você, passo por todas as paradas e volto para casa. O site calcula essa distância sozinho quando você agenda.</p>
+      <div class="rota" aria-label="Exemplo de rota">
+        <span>Minha casa</span><i>→</i><span>Você</span><i>→</i><span>Paradas</span><i>→</i><span>Minha casa</span>
+      </div>
+      <p style="margin-top:14px">Se a espera passar de 4 horas, eu volto para casa e busco você depois. Nesse caso não cobro a espera, e sim uma nova saída e os km da nova rota.</p>
+    </section>
+
+    <section class="exemplo" aria-labelledby="t-exemplo">
+      <h2 id="t-exemplo">Exemplo de cálculo</h2>
+      <p class="muted">Consulta médica com acompanhamento de 1h30, rota completa de 22 km, numa quarta-feira de manhã. Valores de exemplo.</p>
+      <table>
+        <tr><td>Saída</td><td>R$ 35,00</td></tr>
+        <tr><td>Deslocamento (22 km × R$ 5,70)</td><td>R$ 125,40</td></tr>
+        <tr><td>Acompanhamento (1h30 × R$ 45)</td><td>R$ 67,50</td></tr>
+        <tr class="total"><td>Total previsto</td><td>R$ 227,90</td></tr>
+      </table>
+    </section>
+
+    <section class="aviso" aria-labelledby="t-mudanca">
+      <h2 id="t-mudanca">Mudou o trajeto no dia?</h2>
+      <p>A previsão vale para o trajeto que você informou no agendamento. Se no dia você quiser trocar o caminho, mudar um destino ou acrescentar uma parada:</p>
+      <ul>
+        <li>cobro uma <strong>taxa de alteração de R$ 25</strong>, porque a mudança mexe no meu planejamento e nos outros horários do dia;</li>
+        <li>os <strong>km a mais</strong> entram pela tabela normal (R$ 5,70/km);</li>
+        <li>o <strong>tempo a mais</strong> de espera ou acompanhamento também entra pela tabela.</li>
+      </ul>
+      <p>Se a mudança deixar o caminho mais curto, vale o valor combinado. No Pacotão 8 horas não tem taxa de alteração: você muda o trajeto à vontade dentro dos 100 km.</p>
+    </section>
+
+    <a class="btn" href="agendar.html">Agendar e ver a previsão</a>
+  </div>
+</main>
+</body>
+</html>
