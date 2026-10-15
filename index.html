@@ -108,10 +108,17 @@ h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(40px, 
 .service p { margin: 0; color: var(--ink-soft); font-size: 15px; }
 
 /* ---------- Seções provisórias ---------- */
-.placeholder { background: var(--bg-soft); border-top: 1px solid var(--line); }
-.placeholder .wrap { padding-block: 56px; }
-.placeholder p { color: var(--ink-soft); margin: 0; max-width: 60ch; }
-.tag { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+.contato { border-top: 1px solid var(--line); }
+.contato .wrap { padding-block: 56px; display: grid; gap: 16px; }
+.contato p { color: var(--ink-soft); margin: 0; max-width: 60ch; }
+.contato-btns { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
+.contato-btns .btn { gap: 10px; }
+.contato-btns svg { width: 20px; height: 20px; flex: none; }
+.btn-wa { background: #1f7a45; border-color: #1f7a45; color: #fff; }
+.btn-wa:hover { filter: brightness(1.08); }
+.contato-dados { font-size: 15px; color: var(--ink-soft); }
+.contato-dados a { color: var(--ink); font-weight: 600; }
+@media (max-width: 640px) { .contato-btns .btn { flex: 1 1 100%; } }
 
 /* ---------- Textos: Entenda o serviço e Sobre mim ---------- */
 .texto { border-top: 1px solid var(--line); }
@@ -279,11 +286,21 @@ footer a { color: var(--ink-soft); }
     </div>
   </section>
 
-  <section class="placeholder" id="contato" aria-labelledby="contato-titulo">
+  <section class="contato" id="contato" aria-labelledby="contato-titulo">
     <div class="wrap">
-      <span class="tag">Em breve</span>
       <h2 class="section-title" id="contato-titulo">Contato</h2>
-      <p>WhatsApp e e-mail para falar comigo.</p>
+      <p>Quer tirar uma dúvida ou combinar um horário? Me chama no WhatsApp ou manda um e-mail.</p>
+      <div class="contato-btns">
+        <a class="btn btn-wa" href="https://wa.me/5551982059136?text=Ol%C3%A1%2C%20Renata!%20Vim%20pelo%20site%20e%20queria%20conversar%20sobre%20um%20servi%C3%A7o." target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.7 4.3 3.8 1.6.7 2.2.7 3 .6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>
+          WhatsApp
+        </a>
+        <a class="btn btn-ghost" href="mailto:renataherve@gmail.com?subject=Contato%20pelo%20site">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>
+          E-mail
+        </a>
+      </div>
+      <p class="contato-dados">WhatsApp: <a href="https://wa.me/5551982059136?text=Ol%C3%A1%2C%20Renata!%20Vim%20pelo%20site%20e%20queria%20conversar%20sobre%20um%20servi%C3%A7o." target="_blank" rel="noopener">(51) 98205-9136</a> · E-mail: <a href="mailto:renataherve@gmail.com">renataherve@gmail.com</a></p>
     </div>
   </section>
 </main>
@@ -295,7 +312,7 @@ footer a { color: var(--ink-soft); }
   </div>
 </footer>
 
-<a class="float-chat" href="#contato" aria-label="Fale comigo">
+<a class="float-chat" href="https://wa.me/5551982059136?text=Ol%C3%A1%2C%20Renata!%20Vim%20pelo%20site%20e%20queria%20conversar%20sobre%20um%20servi%C3%A7o." target="_blank" rel="noopener" aria-label="Falar comigo no WhatsApp">
   <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13.5C5 8.8 9 5 14 5s9 3.8 9 8.5-4 8.5-9 8.5c-1.3 0-2.5-.2-3.6-.7L5 23l1.5-4.6A8 8 0 0 1 5 13.5z"/><circle cx="10" cy="13.5" r=".6" fill="currentColor"/><circle cx="14" cy="13.5" r=".6" fill="currentColor"/><circle cx="18" cy="13.5" r=".6" fill="currentColor"/></svg>
 </a>
 </body>
