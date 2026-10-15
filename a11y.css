@@ -21,6 +21,9 @@
 #conteudo { position: relative; zoom: var(--a11y-zoom, 1); }
 html.a11y-dislexia #conteudo, html.a11y-dislexia #conteudo * { font-family: "OpenDyslexic", "Comic Sans MS", sans-serif !important; letter-spacing: 0 !important; }
 html.a11y-dislexia #conteudo p, html.a11y-dislexia #conteudo li { line-height: 1.75; }
+/* Com letra maior ou mais larga, palavras longas quebram em vez de empurrar a página para o lado */
+#conteudo { overflow-wrap: anywhere; }
+#conteudo h1, #conteudo h2, #conteudo h3 { hyphens: auto; }
 
 html[data-daltonismo="protanopia"] #conteudo { filter: url(#a11y-protanopia); }
 html[data-daltonismo="protanomalia"] #conteudo { filter: url(#a11y-protanomalia); }
