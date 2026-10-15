@@ -8,7 +8,7 @@ import pathlib
 
 root = pathlib.Path(__file__).parent
 tpl = (root / "src" / "index.template.html").read_text(encoding="utf-8")
-images = {"HERO": "hero.jpg", "ELVIRA": "elvira.jpg", "PRISCILA": "priscila.jpg"}
+images = {"HERO": "hero.jpg", "ELVIRA": "elvira.jpg", "PRISCILA": "priscila.jpg", "RENATA": "renata.jpg"}
 
 
 def fill(html, inline):

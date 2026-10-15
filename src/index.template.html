@@ -129,9 +129,21 @@ h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(40px, 
 .comparativo ul { margin: 0; padding-left: 20px; display: grid; gap: 10px; color: var(--ink-soft); max-width: 70ch; }
 .comparativo li strong { color: var(--ink); font-weight: 600; }
 .compromisso { font-family: var(--font-quote); font-style: italic; font-size: clamp(18px, 2vw, 21px); line-height: 1.5; color: var(--ink) !important; border-left: 3px solid var(--accent); padding-left: 18px; }
-.sobre { background: var(--bg-soft); }
-.sobre .wrap { max-width: 860px; }
-.sobre p { color: var(--ink); }
+/* Sobre mim: foto à esquerda que se dissolve no marrom escuro, texto à direita. No celular a foto fica em cima. */
+.sobre { --sobre-bg: #2b1e16; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: 560px; background: var(--sobre-bg); color: #f3ebe1; color-scheme: dark; }
+.sobre-foto { position: relative; margin: 0; overflow: hidden; }
+.sobre-foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; display: block; }
+.sobre-foto::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, rgba(43,30,22,0) 50%, rgba(43,30,22,.55) 78%, var(--sobre-bg) 100%); }
+.sobre-texto { align-self: center; display: grid; gap: 18px; max-width: 680px; padding-block: clamp(48px, 6vw, 88px); padding-left: clamp(24px, 4vw, 56px); padding-right: max(var(--gutter-r), 5vw); }
+.sobre h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(38px, 4.6vw, 60px); line-height: 1.05; margin: 0 0 10px; color: #fbf7f1; }
+.sobre p { margin: 0; max-width: 62ch; color: #e8ddd0; }
+.sobre ::selection { background: #c9a882; color: #1d1814; }
+@media (max-width: 820px) {
+  .sobre { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  .sobre-foto { height: min(115vw, 560px); }
+  .sobre-foto::after { background: linear-gradient(to bottom, rgba(43,30,22,0) 55%, rgba(43,30,22,.6) 82%, var(--sobre-bg) 100%); }
+  .sobre-texto { max-width: none; padding-top: 8px; padding-left: var(--gutter-l); }
+}
 @media (max-width: 640px) { .pilares { grid-template-columns: minmax(0, 1fr); } .texto .wrap { padding-block: 48px; } }
 
 footer { border-top: 1px solid var(--line); }
@@ -278,12 +290,13 @@ footer a { color: var(--ink-soft); }
     </div>
   </section>
 
-  <section class="texto sobre" id="sobre" aria-labelledby="sobre-titulo">
-    <div class="wrap">
-      <h2 class="section-title" id="sobre-titulo">Sobre mim</h2>
-      <p>Eu sou a Renata Bruno Hervé. Trabalhei duro a vida inteira. Sou formada em Direito e tenho OAB, mas estou afastada da advocacia há um tempo.</p>
-      <p>Em 2020 perdi meu marido, e foi aí que comecei a levar e acompanhar pessoas. Eu precisava de uma renda constante e descobri que gosto de cuidar de quem precisa de uma mão para seguir a rotina.</p>
-      <p>Tenho miastenia gravis. Em 2016 passei por um sufoco sério, e a vida me deu uma segunda chance. Quero aproveitar cada dia dela junto com meus filhos, Rodrigo, Felipe e Ana Isa.</p>
+  <section class="sobre" id="sobre" aria-labelledby="sobre-titulo">
+    <figure class="sobre-foto"><img src="{{RENATA}}" alt="Renata sorrindo, sentada à mesa de um restaurante" loading="lazy" width="896" height="1195"></figure>
+    <div class="sobre-texto">
+      <h2 id="sobre-titulo">Sobre mim</h2>
+      <p>Sou a Renata Bruno Hervé. Sempre fui movida pelo trabalho duro e pela dedicação. Me formei em Direito e conquistei minha OAB com muito orgulho, mas a vida acabou me guiando por caminhos bem diferentes da advocacia.</p>
+      <p>Em 2020, enfrentei a maior dor da minha história: a perda do meu marido. Em meio ao luto, precisei me reinventar e encontrar uma renda constante. Foi aí que algo bonito renasceu em mim. Comecei a acompanhar e levar pessoas que precisavam de apoio para realizar suas tarefas diárias, e descobri uma verdadeira vocação: o dom de cuidar, de estender a mão e de transformar a rotina de quem precisa em um caminho mais leve.</p>
+      <p>Também sei em primeira mão o valor do cuidado. Convivo com a miastenia gravis e, em 2016, passei por um momento muito crítico — uma verdadeira tempestade da qual saí fortalecida. A vida me concedeu uma segunda chance, e não pretendo desperdiçar nem um segundo sequer. Hoje, o meu maior combustível é celebrar cada dia com intensidade e carinho ao lado do meu bem mais precioso: meus filhos, Rodrigo, Felipe e Ana Isa.</p>
     </div>
   </section>
 
