@@ -85,7 +85,7 @@ h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(40px, 
 .quote:nth-child(2) { grid-template-columns: auto 1fr; }
 .quote:nth-child(2) .bubble { order: 2; }
 .quote:nth-child(2) .who { order: 1; }
-.bubble { position: relative; background: var(--bubble); border: 1px solid var(--line); border-radius: 18px; padding: 14px 18px; font-family: var(--font-quote); font-style: italic; font-size: 15px; line-height: 1.5; color: var(--ink); box-shadow: 0 10px 30px -18px rgba(40,25,10,.45); }
+.bubble { margin: 0; position: relative; background: var(--bubble); border: 1px solid var(--line); border-radius: 18px; padding: 14px 18px; font-family: var(--font-quote); font-style: italic; font-size: 15px; line-height: 1.5; color: var(--ink); box-shadow: 0 10px 30px -18px rgba(40,25,10,.45); }
 .bubble p { margin: 0; }
 .who { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; width: 92px; }
 .who img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--bubble); box-shadow: 0 0 0 1px var(--line); }
@@ -154,8 +154,14 @@ footer a { color: var(--ink-soft); }
   .logo svg { width: 40px; height: 40px; }
   .service-list { grid-template-columns: minmax(0, 1fr); gap: 22px; }
   .ctas .btn { flex: 1 1 100%; }
-  .who { width: 76px; }
-  .who img { width: 52px; height: 52px; }
+  /* depoimentos: balão em largura total e a pessoa embaixo, em linha */
+  .quote, .quote:nth-child(2) { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .quote .bubble, .quote:nth-child(2) .bubble { order: 1; }
+  .quote .who, .quote:nth-child(2) .who { order: 2; }
+  .who { width: auto; display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; align-items: center; justify-items: start; text-align: left; padding-left: 12px; }
+  .who img { width: 44px; height: 44px; grid-row: span 2; }
+  .float-chat { width: 50px; height: 50px; }
+  .float-chat svg { width: 24px; height: 24px; }
 }
 </style>
 
