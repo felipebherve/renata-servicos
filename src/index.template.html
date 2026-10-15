@@ -4,6 +4,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital@1&family=Figtree:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="a11y.css">
+<script src="a11y.js" defer></script>
 <style>
 /* Layout: foto da Renata ao volante ocupa o topo e se dissolve no fundo; texto, botões e depoimentos sobre o degradê; serviços em faixa abaixo. */
 :root {
@@ -105,6 +107,24 @@ h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(40px, 
 .placeholder .wrap { padding-block: 56px; }
 .placeholder p { color: var(--ink-soft); margin: 0; max-width: 60ch; }
 .tag { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+
+/* ---------- Textos: Entenda o serviço e Sobre mim ---------- */
+.texto { border-top: 1px solid var(--line); }
+.texto .wrap { padding-block: 64px; display: grid; gap: 28px; }
+.texto .intro { font-size: clamp(17px, 1.8vw, 19px); color: var(--ink); max-width: 62ch; margin: 0; }
+.texto p { margin: 0; max-width: 64ch; color: var(--ink-soft); }
+.texto h3 { margin: 0 0 6px; font-size: 18px; font-weight: 600; color: var(--ink); }
+.pilares { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 40px; }
+.pilares > div { min-width: 0; }
+.comparativo { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 18px; padding: 24px; display: grid; gap: 14px; }
+.comparativo h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(22px, 2.4vw, 28px); }
+.comparativo ul { margin: 0; padding-left: 20px; display: grid; gap: 10px; color: var(--ink-soft); max-width: 70ch; }
+.comparativo li strong { color: var(--ink); font-weight: 600; }
+.compromisso { font-family: var(--font-quote); font-style: italic; font-size: clamp(18px, 2vw, 21px); line-height: 1.5; color: var(--ink) !important; border-left: 3px solid var(--accent); padding-left: 18px; }
+.sobre { background: var(--bg-soft); }
+.sobre .wrap { max-width: 860px; }
+.sobre p { color: var(--ink); }
+@media (max-width: 640px) { .pilares { grid-template-columns: minmax(0, 1fr); } .texto .wrap { padding-block: 48px; } }
 
 footer { border-top: 1px solid var(--line); }
 footer .wrap { padding-block: 28px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--ink-soft); }
@@ -209,19 +229,47 @@ footer a { color: var(--ink-soft); }
   </section>
 
 
-  <section class="placeholder" id="entenda" aria-labelledby="entenda-titulo">
+  <section class="texto" id="entenda" aria-labelledby="entenda-titulo">
     <div class="wrap">
-      <span class="tag">Em breve</span>
       <h2 class="section-title" id="entenda-titulo">Entenda o serviço prestado</h2>
-      <p>Aqui vou explicar como funciona cada serviço e como o valor da corrida e do acompanhamento é calculado.</p>
+      <p class="intro">Muita gente me chama de motorista, mas o meu trabalho vai além do volante. Eu busco você em casa, levo até onde precisa, espero o tempo que for necessário e trago de volta. E, quando faz diferença, eu desço do carro e vou junto.</p>
+      <div class="pilares">
+        <div>
+          <h3>Acompanhante de idosos</h3>
+          <p>Vou junto às consultas, exames, fisioterapia, mercado e almoço. Ajudo a entrar e sair do carro, carrego as sacolas e fico na sala de espera. Se a família quiser, presto atenção no que o médico orientou e repasso para vocês. Ir acompanhado ajuda a pessoa a entender as orientações, tirar dúvidas e seguir o tratamento com mais tranquilidade.</p>
+        </div>
+        <div>
+          <h3>Crianças e jovens</h3>
+          <p>Levo e busco na escola, faculdade, clube, cursos e consultas. Os pais sabem quem vai buscar, a que horas e para onde. Combinamos tudo antes, e eu aviso a família quando chegamos.</p>
+        </div>
+        <div>
+          <h3>Pets de pequeno porte</h3>
+          <p>Levo o seu bichinho ao veterinário, ao banho e tosa ou ao hotelzinho, na caixa de transporte e com calma. Se você não puder ir junto, eu acompanho a consulta e conto o que o veterinário disse.</p>
+        </div>
+        <div>
+          <h3>Ida e volta de eventos</h3>
+          <p>Festas, casamentos e formaturas. Deixo você na porta e busco na hora combinada, sem precisar procurar carro de madrugada.</p>
+        </div>
+      </div>
+      <div class="comparativo">
+        <h3>Por que não é igual a chamar um aplicativo</h3>
+        <ul>
+          <li><strong>É sempre a mesma pessoa.</strong> No aplicativo, cada corrida tem um motorista diferente. Comigo você sabe quem vem, e eu já conheço você, sua família e a sua rotina.</li>
+          <li><strong>Eu não deixo você na porta e vou embora.</strong> Espero, acompanho e trago de volta.</li>
+          <li><strong>O horário é combinado com antecedência.</strong> Não tem cancelamento em cima da hora nem falta de carro no momento em que você precisa.</li>
+          <li><strong>Você sabe o valor antes.</strong> Aqui no site está explicado como o preço é calculado, sem surpresa no final.</li>
+        </ul>
+      </div>
+      <p class="compromisso">Quando eu digo que vou estar lá, eu estou. Levo a sério cada compromisso que assumo, porque sei que do outro lado tem uma consulta marcada, um filho esperando na saída da aula ou um pet que precisa de cuidado. Só deixo de cumprir um horário por um problema de saúde, e nesse caso aviso o quanto antes.</p>
     </div>
   </section>
 
-  <section class="placeholder" id="sobre" aria-labelledby="sobre-titulo">
+  <section class="texto sobre" id="sobre" aria-labelledby="sobre-titulo">
     <div class="wrap">
-      <span class="tag">Em breve</span>
       <h2 class="section-title" id="sobre-titulo">Sobre mim</h2>
-      <p>Um pouco da minha história e de por que eu gosto de cuidar das pessoas.</p>
+      <p>Eu sou a Renata Bruno Hervé. Trabalhei duro a vida inteira. Sou formada em Direito e tenho OAB, mas estou afastada da advocacia há um tempo.</p>
+      <p>Em 2020 perdi meu marido, e foi aí que comecei a levar e acompanhar pessoas. Eu precisava de uma renda constante e descobri que gosto de cuidar de quem precisa de uma mão para seguir a rotina.</p>
+      <p>Tenho miastenia gravis. Em 2016 passei por um sufoco sério, e a vida me deu uma segunda chance. Quero aproveitar cada dia dela junto com meus filhos, Rodrigo, Felipe e Ana Isa.</p>
     </div>
   </section>
 
