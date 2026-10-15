@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Renata B. Hervé · Advocacia e Consultoria Jurídica</title>
+<meta name="description" content="Dra. Renata B. Hervé: família e sucessões, direito do consumidor, contratos, cobrança extrajudicial e registro de marcas. Atendimento próximo e descomplicado.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Figtree:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../a11y.css">
+<script src="../a11y.js" defer></script>
+<style>
+/* Azul-marinho e dourado, como no modelo, com tudo reto. O site é escuro nos dois temas do sistema. */
+:root {
+  --bg: #0e1726; --bg-soft: #16233a; --panel: #121e33; --ink: #f3ece0; --ink-soft: #c9c0b1;
+  --gold: #d3b26c; --gold-deep: #9c7a3a; --gold-ink: #17120a; --line: #2c3b57;
+  --accent: #d3b26c; --accent-ink: #17120a;
+  --gold-grad: linear-gradient(135deg, #8f6d33 0%, #c9a65e 32%, #ead19a 52%, #b8914b 74%, #8a6830 100%);
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0e1726; } }
+:root[data-theme="dark"] { --bg: #0e1726; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+::selection { background: var(--gold); color: var(--gold-ink); }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+.wrap { max-width: 1120px; margin-inline: auto; padding-left: var(--gutter-l); padding-right: var(--gutter-r); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
+.fio { height: 2px; background: var(--gold-grad); }
+
+/* Cabeçalho */
+.topo { text-align: center; padding-block: 28px 24px; }
+.marca { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; }
+.marca svg { width: 52px; height: 52px; color: var(--gold); }
+.marca-nome { font-family: var(--font-display); font-weight: 600; font-size: clamp(28px, 4vw, 38px); letter-spacing: .08em; line-height: 1; color: var(--gold); }
+.marca-sub { font-size: 11.5px; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; color: var(--ink-soft); }
+
+/* Destaque: foto e painel dourado lado a lado */
+.destaque { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border: 1px solid var(--gold-deep); }
+.destaque-foto { margin: 0; min-height: 420px; position: relative; }
+.destaque-foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; display: block; }
+.destaque-painel { background: var(--gold-grad); color: var(--gold-ink); display: grid; align-content: center; gap: 26px; padding: clamp(28px, 5vw, 56px); }
+.destaque-painel h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(32px, 4.2vw, 50px); line-height: 1.08; margin: 0; text-wrap: balance; }
+.destaque-painel p { margin: 0; font-size: 17px; max-width: 34ch; color: #2a2010; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 26px; font: inherit; font-weight: 600; font-size: 15.5px; letter-spacing: .03em; text-decoration: none; border: 1.5px solid var(--gold); cursor: pointer; border-radius: 2px; }
+.btn svg { width: 20px; height: 20px; flex: none; }
+.btn-escuro { background: var(--bg); color: var(--gold); border-color: var(--bg); justify-self: start; }
+.btn-escuro:hover { background: #17233a; }
+.btn-ouro { background: var(--gold-grad); color: var(--gold-ink); border-color: var(--gold-deep); }
+.btn-ouro:hover { filter: brightness(1.06); }
+.btn-linha { background: transparent; color: var(--gold); }
+.btn-linha:hover { background: rgba(211,178,108,.1); }
+
+/* Áreas de atuação */
+.secao { padding-block: clamp(56px, 7vw, 88px); }
+.titulo { font-family: var(--font-display); font-weight: 600; color: var(--gold); font-size: clamp(30px, 3.6vw, 42px); line-height: 1.1; margin: 0 0 10px; text-align: center; }
+.titulo-sub { text-align: center; color: var(--ink-soft); margin: 0 auto 44px; max-width: 56ch; }
+.areas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 44px 32px; margin: 0; padding: 0; list-style: none; }
+.area { text-align: center; display: grid; justify-items: center; align-content: start; gap: 12px; }
+.icone { width: 76px; height: 76px; border-radius: 50%; background: var(--gold-grad); display: grid; place-items: center; box-shadow: 0 0 0 1px var(--gold-deep), 0 8px 22px rgba(0,0,0,.35); }
+.icone svg { width: 36px; height: 36px; color: #2a1f0c; }
+.area h3 { font-family: var(--font-display); font-weight: 600; font-size: 22px; line-height: 1.15; letter-spacing: .02em; color: var(--gold); margin: 6px 0 0; padding-bottom: 10px; border-bottom: 1px solid var(--gold-deep); }
+.area p { margin: 0; color: var(--ink-soft); font-size: 15.5px; max-width: 30ch; }
+
+/* Sobre */
+.sobre { background: var(--panel); border-block: 1px solid var(--gold-deep); }
+.sobre .wrap { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+.sobre .titulo { text-align: left; }
+.sobre-lead { font-family: var(--font-display); font-size: clamp(21px, 2.2vw, 25px); line-height: 1.3; color: var(--ink); margin: 0 0 22px; font-style: italic; }
+.sobre-texto p { margin: 0 0 16px; max-width: 66ch; }
+.sobre-texto h3 { font-family: var(--font-display); font-weight: 600; font-size: 24px; color: var(--gold); margin: 28px 0 12px; }
+.sobre-texto ul { margin: 0 0 22px; padding-left: 20px; display: grid; gap: 12px; max-width: 66ch; }
+.sobre-texto li::marker { color: var(--gold); }
+.sobre-texto strong { color: var(--gold); font-weight: 600; }
+.sobre-foto { margin: 0; border: 1px solid var(--gold-deep); padding: 8px; background: var(--bg); position: sticky; top: 24px; }
+.sobre-foto img { width: 100%; height: auto; display: block; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 20%; }
+
+/* Contato */
+.contato { text-align: center; }
+.contato .acoes { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 8px; }
+.rodape { border-top: 1px solid var(--line); padding-block: 24px 32px; color: var(--ink-soft); font-size: 14.5px; }
+.rodape .wrap { display: flex; flex-wrap: wrap; gap: 10px 28px; justify-content: center; align-items: center; }
+.rodape a { text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+.rodape a:hover { color: var(--gold); }
+.rodape svg { width: 18px; height: 18px; color: var(--gold); flex: none; }
+
+/* Formulário "Entre em contato!" */
+dialog.form { width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--gold-deep); background: var(--bg-soft); color: var(--ink); overflow: auto; }
+dialog.form::backdrop { background: rgba(5, 9, 16, .72); }
+.form-corpo { padding: 26px clamp(18px, 4vw, 30px) 28px; display: grid; gap: 16px; }
+.form-topo { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+.form h2 { font-family: var(--font-display); font-weight: 600; color: var(--gold); font-size: 30px; line-height: 1.1; margin: 0; }
+.form-intro { margin: -6px 0 0; color: var(--ink-soft); font-size: 15px; }
+.fechar { background: none; border: 1px solid var(--line); color: var(--ink); width: 40px; height: 40px; flex: none; display: grid; place-items: center; cursor: pointer; border-radius: 2px; }
+.fechar:hover { border-color: var(--gold); color: var(--gold); }
+.fechar svg { width: 18px; height: 18px; }
+.campo { display: grid; gap: 6px; }
+.campo label { font-weight: 600; font-size: 14.5px; }
+.campo input, .campo select, .campo textarea { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 2px; padding: 11px 12px; width: 100%; }
+.campo textarea { min-height: 130px; resize: vertical; }
+.campo input:focus, .campo select:focus, .campo textarea:focus { outline: 2px solid var(--gold); outline-offset: 0; border-color: var(--gold); }
+.erro { color: #f1a78f; font-size: 14px; margin: -4px 0 0; }
+.form-acoes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+
+@media (max-width: 900px) {
+  .areas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sobre .wrap { grid-template-columns: minmax(0, 1fr); }
+  .sobre-foto { position: static; max-width: 420px; order: -1; }
+}
+@media (max-width: 720px) {
+  .destaque { grid-template-columns: minmax(0, 1fr); }
+  .destaque-foto { min-height: 0; aspect-ratio: 4 / 4.2; }
+  .btn-escuro { justify-self: stretch; }
+}
+@media (max-width: 520px) {
+  .areas { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .form-acoes { grid-template-columns: minmax(0, 1fr); }
+  .contato .btn { width: 100%; }
+}
+</style>
+</head>
+<body>
+<div class="fio"></div>
+<header class="topo">
+  <a class="marca" href="./" aria-label="Renata B. Hervé, Advocacia e Consultoria Jurídica, início">
+    <svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">
+      <rect x="18" y="9" width="26" height="10" rx="2" transform="rotate(-30 31 14)"/>
+      <rect x="14" y="5" width="8" height="18" rx="2" transform="rotate(-30 18 14)"/>
+      <rect x="40" y="5" width="8" height="18" rx="2" transform="rotate(-30 44 14)"/>
+      <rect x="31" y="16" width="5" height="30" rx="2" transform="rotate(-30 33.5 31)"/>
+      <rect x="10" y="50" width="34" height="5" rx="1.5"/>
+      <rect x="14" y="44" width="26" height="5" rx="1.5"/>
+    </svg>
+    <span class="marca-nome">RENATA B. HERVÉ</span>
+    <span class="marca-sub">Advocacia &amp; Consultoria Jurídica</span>
+  </a>
+</header>
+
+<main>
+  <div class="wrap">
+    <section class="destaque" aria-labelledby="titulo-principal">
+      <figure class="destaque-foto"><img src="../img/renata.jpg" alt="Dra. Renata B. Hervé sorrindo, sentada à mesa de um restaurante" width="896" height="1195"></figure>
+      <div class="destaque-painel">
+        <h1 id="titulo-principal">Elegância, Eficiência e Justiça ao seu Lado.</h1>
+        <p>Suporte jurídico ágil, transparente e descomplicado, com atendimento próximo e personalizado.</p>
+        <button type="button" class="btn btn-escuro" data-abrir-form>Entre em contato!</button>
+      </div>
+    </section>
+  </div>
+
+  <section class="secao" id="areas" aria-labelledby="areas-titulo">
+    <div class="wrap">
+      <h2 class="titulo" id="areas-titulo">Áreas de atuação</h2>
+      <p class="titulo-sub">Soluções extrajudiciais e consultoria para resolver a sua questão com segurança e sem complicação.</p>
+      <ul class="areas">
+        <li class="area">
+          <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 3.5 6 6M12 6l6 6M9.5 9.5l5 5M8 4l12 12M3 21l7.5-7.5"/><path d="M3 21h9"/></svg></span>
+          <h3>Divórcios &amp; Inventários Extrajudiciais</h3>
+          <p>Casos amigáveis resolvidos em cartório. Organização dos documentos e minuta da escritura. Rápido e eficiente.</p>
+        </li>
+        <li class="area">
+          <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span>
+          <h3>Contratos Simples</h3>
+          <p>Análise e elaboração de contratos de locação, prestação de serviços, compra e venda e termos de uso.</p>
+        </li>
+        <li class="area">
+          <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 12h6M10 15.5h6M10 19h4"/></svg></span>
+          <h3>Direito do Consumidor</h3>
+          <p>Problemas com voos, negativação indevida e cobranças abusivas de telefonia, bancos e outros serviços.</p>
+        </li>
+        <li class="area">
+          <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="5.5"/><path d="M10 14.5v-5h2.2a1.6 1.6 0 0 1 0 3.2H10"/></svg></span>
+          <h3>Registro de Marcas no INPI</h3>
+          <p>Pedido e acompanhamento do registro da sua marca, para pequenas empresas e criadores.</p>
+        </li>
+        <li class="area">
+          <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 7h14"/><path d="m5 7-3 7a3.5 3.5 0 0 0 6 0z"/><path d="m19 7-3 7a3.5 3.5 0 0 0 6 0z"/><path d="M8 21h8"/></svg></span>
+          <h3>Cobrança Extrajudicial</h3>
+          <p>Negociação direta e resolutiva para reaver valores de forma rápida, sem longos processos judiciais.</p>
+        </li>
+        <li class="area">
+          <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m2 12 4-4 4 2 3-3h3l6 5"/><path d="m22 12-4 4-2-1-3 3-2-1-1 1-6-6"/><path d="m10 10 3 3"/></svg></span>
+          <h3>Negociação Extrajudicial de Dívidas</h3>
+          <p>Notificações e negociação direta para quitar ou renegociar dívidas sem precisar ir à Justiça.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="secao sobre" id="sobre" aria-labelledby="sobre-titulo">
+    <div class="wrap">
+      <div class="sobre-texto">
+        <h2 class="titulo" id="sobre-titulo">Conheça a Dra. Renata B. Hervé</h2>
+        <p class="sobre-lead">Uma advocacia pautada na empatia, na dedicação e no respeito à sua história.</p>
+        <p>Acredito que o Direito vai muito além de leis e processos: trata-se de pessoas, de recomeços e da proteção daquilo que é mais valioso para você. Minha trajetória é marcada pela resiliência e pelo compromisso humano de cuidar e proteger quem precisa de suporte jurídico ágil, transparente e descomplicado.</p>
+        <p>Com formação sólida em Direito e inscrição na OAB, dedico minha atuação a prestar uma consultoria e assessoria jurídica próxima e personalizada, garantindo tranquilidade em cada etapa do processo.</p>
+        <h3>Principais Áreas de Atuação:</h3>
+        <ul>
+          <li><strong>Família e Sucessões:</strong> Dissoluções de casamento (divórcios) e inventários extrajudiciais ágeis e amigáveis, conduzidos com o máximo de respeito, sensibilidade e eficiência.</li>
+          <li><strong>Direito do Consumidor:</strong> Defesa dos seus direitos diante de cobranças indevidas, problemas com empresas de telefonia, bancos, companhias aéreas e negativações indevidas.</li>
+          <li><strong>Assessoria Contratual:</strong> Análise e elaboração de contratos simples (locação, compra e venda de veículos/imóveis e prestação de serviços), garantindo segurança jurídica às suas transações.</li>
+          <li><strong>Cobrança Extrajudicial:</strong> Negociação direta e resolutiva de débitos para reaver valores de forma rápida e sem a necessidade de longos processos judiciais.</li>
+        </ul>
+        <p>Seja para resolver pendências com leveza ou para proteger os seus direitos, estou aqui para estender a mão e oferecer o suporte jurídico que você merece.</p>
+      </div>
+      <figure class="sobre-foto"><img src="../img/renata.jpg" alt="" width="896" height="1195" loading="lazy"></figure>
+    </div>
+  </section>
+
+  <section class="secao contato" id="contato" aria-labelledby="contato-titulo">
+    <div class="wrap">
+      <h2 class="titulo" id="contato-titulo">Vamos conversar?</h2>
+      <p class="titulo-sub">Conte a sua situação e eu retorno pelo WhatsApp ou por e-mail.</p>
+      <div class="acoes"><button type="button" class="btn btn-ouro" data-abrir-form>Entre em contato!</button></div>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="wrap">
+    <a href="https://wa.me/5551982059136" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.6 11.6 0 0 0 4.4 3.9c1.6.7 2.3.8 3.1.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>(51) 98205-9136</a>
+    <a href="mailto:renataherve@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 7 8.5-7"/></svg>renataherve@gmail.com</a>
+    <span>Atendimento em Porto Alegre e região</span>
+  </div>
+</footer>
+
+<dialog class="form" id="form-contato" aria-labelledby="form-titulo">
+  <form class="form-corpo" method="dialog" novalidate>
+    <div class="form-topo">
+      <h2 id="form-titulo">Entre em contato!</h2>
+      <button type="button" class="fechar" data-fechar aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <p class="form-intro">Preencha e escolha abaixo por onde quer enviar. A mensagem abre pronta no seu WhatsApp ou no seu e-mail.</p>
+    <div class="campo">
+      <label for="f-nome">Seu nome</label>
+      <input id="f-nome" name="nome" autocomplete="name" required>
+    </div>
+    <div class="campo">
+      <label for="f-tipo">Tipo de serviço</label>
+      <select id="f-tipo" name="tipo" required>
+        <option value="">Escolha uma opção</option>
+        <option>Divórcios e Inventários Extrajudiciais</option>
+        <option>Contratos Simples</option>
+        <option>Direito do Consumidor</option>
+        <option>Registro de Marcas no INPI</option>
+        <option>Cobrança Extrajudicial</option>
+        <option>Negociação Extrajudicial de Dívidas</option>
+        <option>Outro</option>
+      </select>
+    </div>
+    <div class="campo">
+      <label for="f-msg">Conte a sua situação</label>
+      <textarea id="f-msg" name="mensagem" rows="5"></textarea>
+    </div>
+    <p class="erro" id="f-erro" role="alert" hidden></p>
+    <div class="form-acoes">
+      <button type="button" class="btn btn-ouro" data-enviar="whatsapp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>WhatsApp</button>
+      <button type="button" class="btn btn-linha" data-enviar="email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 7 8.5-7"/></svg>E-mail</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function () {
+  var WHATS = '5551982059136';
+  var EMAIL = 'renataherve@gmail.com';
+  var dlg = document.getElementById('form-contato');
+  var nome = document.getElementById('f-nome');
+  var tipo = document.getElementById('f-tipo');
+  var msg = document.getElementById('f-msg');
+  var erro = document.getElementById('f-erro');
+
+  document.querySelectorAll('[data-abrir-form]').forEach(function (b) {
+    b.addEventListener('click', function () { erro.hidden = true; dlg.showModal(); nome.focus(); });
+  });
+  dlg.querySelector('[data-fechar]').addEventListener('click', function () { dlg.close(); });
+  // Clicar fora da caixa fecha o formulário
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+
+  [nome, tipo].forEach(function (c) { c.addEventListener('input', function () { if (!erro.hidden) validar(); }); });
+
+  function validar() {
+    var falta = [];
+    if (!nome.value.trim()) falta.push('seu nome');
+    if (!tipo.value) falta.push('o tipo de serviço');
+    if (!falta.length) { erro.hidden = true; return true; }
+    erro.textContent = 'Preencha ' + falta.join(' e ') + ' para continuar.';
+    erro.hidden = false;
+    return false;
+  }
+
+  dlg.querySelectorAll('[data-enviar]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (!validar()) { (!nome.value.trim() ? nome : tipo).focus(); return; }
+      var n = nome.value.trim(), t = tipo.value, m = msg.value.trim();
+      if (b.getAttribute('data-enviar') === 'whatsapp') {
+        var texto = 'Olá, sou ' + n + '. Quero falar sobre ' + t + '.' + (m ? '\n\n' + m : '');
+        window.open('https://wa.me/' + WHATS + '?text=' + encodeURIComponent(texto), '_blank', 'noopener');
+      } else {
+        var assunto = n + ' - ' + t;
+        var corpo = 'Olá, Dra. Renata.\n\nMeu nome é ' + n + ' e gostaria de falar sobre ' + t + '.' + (m ? '\n\n' + m : '') + '\n\nAtenciosamente,\n' + n;
+        location.href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpo);
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
