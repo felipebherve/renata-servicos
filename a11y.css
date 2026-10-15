@@ -1,0 +1,40 @@
+/* Barra de acessibilidade: fonte para dislexia, filtros para daltonismo e tamanho do texto.
+   Usa as cores de cada página (--bg-soft, --ink, --line, --accent) e tem valores de reserva. */
+@font-face { font-family: "OpenDyslexic"; src: url("fonts/opendyslexic-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "OpenDyslexic"; src: url("fonts/opendyslexic-latin-700-normal.woff2") format("woff2"); font-weight: 600 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "OpenDyslexic"; src: url("fonts/opendyslexic-latin-400-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+
+.a11y-bar { position: relative; z-index: 20; background: var(--bg-soft, #ece3d7); color: var(--ink, #2a221c); border-bottom: 1px solid var(--line, #d3c6b5); font-family: "Figtree", "Segoe UI", system-ui, sans-serif; font-size: 14px; line-height: 1.2; }
+.a11y-bar .a11y-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 14px; padding-block: 8px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.a11y-bar .a11y-label { font-weight: 600; letter-spacing: .04em; }
+.a11y-bar button, .a11y-bar select { font: inherit; font-size: 14px; color: inherit; background: var(--bg, #f5efe7); border: 1px solid var(--line, #d3c6b5); border-radius: 999px; min-height: 34px; padding: 0 14px; cursor: pointer; }
+.a11y-bar select { padding-right: 10px; max-width: 100%; }
+.a11y-bar button[aria-pressed="true"] { background: var(--accent, #6e5641); border-color: var(--accent, #6e5641); color: var(--accent-ink, #fbf7f1); }
+.a11y-bar button:hover, .a11y-bar select:hover { border-color: var(--accent, #6e5641); }
+.a11y-bar :focus-visible { outline: 2px solid var(--accent, #6e5641); outline-offset: 2px; }
+.a11y-bar .a11y-size { display: inline-flex; align-items: center; gap: 4px; }
+.a11y-bar .a11y-size button { min-width: 40px; padding: 0 10px; font-weight: 600; }
+.a11y-bar .a11y-size output { min-width: 3.2em; text-align: center; font-variant-numeric: tabular-nums; }
+.a11y-svg { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* Conteúdo que recebe os ajustes */
+#conteudo { position: relative; zoom: var(--a11y-zoom, 1); }
+html.a11y-dislexia #conteudo, html.a11y-dislexia #conteudo * { font-family: "OpenDyslexic", "Comic Sans MS", sans-serif !important; letter-spacing: 0 !important; }
+html.a11y-dislexia #conteudo p, html.a11y-dislexia #conteudo li { line-height: 1.75; }
+
+html[data-daltonismo="protanopia"] #conteudo { filter: url(#a11y-protanopia); }
+html[data-daltonismo="protanomalia"] #conteudo { filter: url(#a11y-protanomalia); }
+html[data-daltonismo="deuteranopia"] #conteudo { filter: url(#a11y-deuteranopia); }
+html[data-daltonismo="deuteranomalia"] #conteudo { filter: url(#a11y-deuteranomalia); }
+html[data-daltonismo="tritanopia"] #conteudo { filter: url(#a11y-tritanopia); }
+html[data-daltonismo="tritanomalia"] #conteudo { filter: url(#a11y-tritanomalia); }
+/* Sem percepção de cor (total ou parcial): reforça o contraste em vez de mexer nas cores */
+html[data-daltonismo="acromatopsia"] #conteudo { filter: grayscale(1) contrast(1.35); }
+html[data-daltonismo="acromatomalia"] #conteudo { filter: saturate(1.6) contrast(1.25); }
+
+@media (max-width: 520px) {
+  .a11y-bar .a11y-label { display: none; }
+  .a11y-bar .a11y-inner { gap: 6px 8px; padding-block: 6px; }
+  .a11y-bar button, .a11y-bar select { font-size: 13px; padding: 0 10px; }
+  .a11y-bar select { max-width: 150px; }
+}
