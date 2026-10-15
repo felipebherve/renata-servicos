@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agende sua viagem · Renata Multi Serviços</title>
+<meta name="description" content="Veja os dias livres da Renata, calcule o valor da sua viagem e faça seu pedido.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Mesma paleta da página inicial. Calendário à esquerda, pedido à direita; no celular um embaixo do outro. */
+:root {
+  --bg: #f5efe7; --bg-soft: #ece3d7; --ink: #2a221c; --ink-soft: #5b4f45;
+  --accent: #6e5641; --accent-ink: #fbf7f1; --line: #d3c6b5; --card: #fffdf9;
+  --pend: #c98a2b; --pend-bg: #f6e6c8; --busy: #8a3b2e; --busy-bg: #efd3cc; --free: #3f7a4a;
+  --font-display: "Libre Caslon Display", Georgia, serif;
+  --font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1d1814; --bg-soft: #26201b; --ink: #f1e9df; --ink-soft: #c4b6a7; --accent: #c9a882; --accent-ink: #1d1814;
+    --line: #4a3f35; --card: #2b241e; --pend: #e0aa55; --pend-bg: #4a3a20; --busy: #e28a78; --busy-bg: #4d2a24; --free: #7fbf88;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1d1814; --bg-soft: #26201b; --ink: #f1e9df; --ink-soft: #c4b6a7; --accent: #c9a882; --accent-ink: #1d1814;
+  --line: #4a3f35; --card: #2b241e; --pend: #e0aa55; --pend-bg: #4a3a20; --busy: #e28a78; --busy-bg: #4d2a24; --free: #7fbf88;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.5; }
+.wrap { max-width: 1180px; margin-inline: auto; padding-inline: 16px; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+header { border-bottom: 1px solid var(--line); }
+header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 16px; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo svg { width: 40px; height: 40px; color: var(--accent); }
+.logo-name { font-family: var(--font-display); font-size: 24px; letter-spacing: .06em; line-height: 1; display: block; }
+.logo-sub { font-size: 10px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; display: block; margin-top: 4px; color: var(--ink-soft); }
+.back { font-size: 15px; font-weight: 500; }
+
+h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(32px, 5vw, 48px); line-height: 1.05; margin: 36px 0 8px; }
+.intro { color: var(--ink-soft); margin: 0 0 28px; max-width: 62ch; }
+.demo { background: var(--pend-bg); border: 1px solid var(--pend); border-radius: 12px; padding: 10px 14px; margin: 0 0 24px; font-size: 14px; }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 32px; align-items: start; padding-bottom: 64px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; min-width: 0; }
+h2 { font-family: var(--font-display); font-weight: 400; font-size: 26px; margin: 0 0 14px; }
+
+/* Calendário */
+.cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.cal-head strong { font-size: 18px; }
+.icon-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--ink); font-size: 18px; cursor: pointer; }
+.icon-btn:disabled { opacity: .35; cursor: default; }
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.cal .dow { font-size: 12px; font-weight: 600; color: var(--ink-soft); text-align: center; padding: 4px 0; }
+.day { aspect-ratio: 1; border: 1px solid transparent; border-radius: 10px; background: var(--bg); color: var(--ink); font: inherit; font-size: 15px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 0; }
+.day:hover:not(:disabled) { border-color: var(--accent); }
+.day:disabled { opacity: .3; cursor: default; background: transparent; }
+.day.sel { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.day.today .n { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.dots { display: flex; gap: 3px; height: 7px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; }
+.dot.em_reserva { background: var(--pend); }
+.dot.reservado { background: var(--busy); }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--ink-soft); margin-top: 14px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.day-info { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 14px; }
+.day-info h3 { margin: 0 0 8px; font-size: 16px; }
+.slots { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.slot { display: flex; justify-content: space-between; gap: 10px; padding: 8px 12px; border-radius: 10px; font-size: 14px; }
+.slot.em_reserva { background: var(--pend-bg); }
+.slot.reservado { background: var(--busy-bg); }
+.muted { color: var(--ink-soft); font-size: 14px; margin: 0; }
+
+/* Formulário */
+form { display: flex; flex-direction: column; gap: 16px; }
+fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+legend { font-weight: 600; font-size: 15px; margin-bottom: 8px; padding: 0; }
+label { display: flex; flex-direction: column; gap: 5px; font-size: 14px; font-weight: 500; min-width: 0; }
+input, select, textarea { font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; width: 100%; min-width: 0; }
+textarea { resize: vertical; min-height: 70px; }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.choice { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.choice label { flex-direction: row; align-items: flex-start; gap: 10px; border: 1px solid var(--line); border-radius: 12px; padding: 12px; cursor: pointer; background: var(--bg); }
+.choice label:has(input:checked) { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.choice input { width: auto; margin-top: 3px; }
+.choice small { display: block; color: var(--ink-soft); font-weight: 400; }
+.check { flex-direction: row; align-items: center; gap: 10px; font-weight: 500; }
+.check input { width: 20px; height: 20px; }
+.stop { border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px; background: var(--bg); }
+.stop-head { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 14px; }
+.stop .row { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+.link-btn { background: none; border: 0; color: var(--accent); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; padding: 4px 0; text-decoration: underline; text-underline-offset: 3px; }
+.hint { font-size: 13px; color: var(--ink-soft); margin: 0; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 24px; border-radius: 999px; font: inherit; font-weight: 600; font-size: 15.5px; border: 1.5px solid var(--accent); cursor: pointer; text-decoration: none; }
+.btn-solid { background: var(--accent); color: var(--accent-ink); }
+.btn-ghost { background: transparent; color: var(--ink); }
+.btn:disabled { opacity: .5; cursor: progress; }
+.btn-wa { background: #1f8f4e; border-color: #1f8f4e; color: #fff; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.quote { border-top: 1px solid var(--line); padding-top: 14px; }
+.quote table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.quote td { padding: 5px 0; vertical-align: top; }
+.quote td:last-child { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; padding-left: 12px; }
+.quote tr.total td { border-top: 1px solid var(--line); font-weight: 700; font-size: 18px; padding-top: 10px; }
+.msg { border-radius: 12px; padding: 12px 14px; font-size: 15px; }
+.msg.err { background: var(--busy-bg); }
+.msg.ok { background: var(--bg-soft); border: 1px solid var(--line); }
+.msg.warn { background: var(--pend-bg); }
+
+details.tabela { margin-top: 20px; }
+details.tabela summary { cursor: pointer; font-weight: 600; }
+details.tabela ul { padding-left: 18px; margin: 10px 0 0; color: var(--ink-soft); font-size: 14px; }
+
+@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 520px) {
+  .row, .stop .row, .choice { grid-template-columns: minmax(0, 1fr); }
+  .card { padding: 16px; }
+  .actions .btn { flex: 1 1 100%; }
+  .day { font-size: 14px; border-radius: 8px; }
+  .back { display: none; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="logo" href="index.html" aria-label="Renata Multi Serviços, página inicial">
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <circle cx="24" cy="24" r="22.5"/>
+        <path d="M9 29.5h30M11 29.5v-3.2c0-1 .5-1.9 1.4-2.3l4.1-1.9 3.7-4.3c.6-.7 1.5-1.1 2.4-1.1h6.6c1 0 1.9.5 2.5 1.2l3.4 4.3 2.9.9c1.2.4 2 1.5 2 2.8v3.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M17 22.1h19.6M24.6 17v5.1" stroke-linecap="round"/>
+        <circle cx="16.5" cy="30" r="2.6" fill="currentColor" stroke="none"/><circle cx="32.5" cy="30" r="2.6" fill="currentColor" stroke="none"/>
+      </svg>
+      <span><span class="logo-name">RENATA</span><span class="logo-sub">Multi Serviços</span></span>
+    </a>
+    <a class="back" href="index.html">← Voltar ao início</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Agende sua viagem</h1>
+  <p class="intro">Veja os dias livres, monte o seu trajeto e saiba o valor na hora. Eu recebo o seu pedido por e-mail e WhatsApp e confirmo em até 5 dias. Enquanto isso, o horário aparece como "em reserva" para os outros clientes, sem nenhum dado seu.</p>
+  <p class="demo" id="demo" hidden>Modo demonstração: a agenda tem reservas de exemplo e os km são estimados. Nenhum pedido é enviado de verdade.</p>
+
+  <div class="grid">
+    <section class="card" aria-labelledby="cal-titulo">
+      <h2 id="cal-titulo">Calendário</h2>
+      <div class="cal-head">
+        <button class="icon-btn" id="prev" type="button" aria-label="Mês anterior">‹</button>
+        <strong id="mes" aria-live="polite"></strong>
+        <button class="icon-btn" id="next" type="button" aria-label="Próximo mês">›</button>
+      </div>
+      <div class="cal" id="cal" role="grid"></div>
+      <div class="legend">
+        <span><i class="dot reservado"></i> Reservado</span>
+        <span><i class="dot em_reserva"></i> Em reserva (aguardando confirmação)</span>
+        <span>Sem marca: livre</span>
+      </div>
+      <div class="day-info" id="day-info">
+        <p class="muted">Toque em um dia para ver os horários ocupados.</p>
+      </div>
+      <details class="tabela">
+        <summary>Como o valor é calculado</summary>
+        <ul>
+          <li>R$ 35 por saída + R$ 5,70 por km. A rota conta da minha casa (Hípica) até você, todas as paradas e a volta para casa.</li>
+          <li>Espera no carro: 30 min grátis por parada, depois R$ 30/h. Acima de 4h eu volto para casa e busco depois (nova saída + km).</li>
+          <li>Acompanhamento em consultas, mercado, restaurante ou lojas: R$ 45/h (mínimo 1h).</li>
+          <li>Pet pequeno: + R$ 20 por trecho.</li>
+          <li>Saída a partir das 20h, antes das 6h, domingos e feriados: + 20%.</li>
+          <li>Pacotão 8 horas: R$ 850 com até 100 km (km extra R$ 2,50).</li>
+        </ul>
+      </details>
+    </section>
+
+    <section class="card" aria-labelledby="form-titulo">
+      <h2 id="form-titulo">Seu pedido</h2>
+      <form id="form" novalidate>
+        <fieldset>
+          <legend>Tipo de serviço</legend>
+          <div class="choice">
+            <label><input type="radio" name="tipo" value="avulso" checked><span>Corrida<small>Pago pelo trajeto, espera e acompanhamento</small></span></label>
+            <label><input type="radio" name="tipo" value="pacote"><span>Pacotão 8 horas<small>Fico com você o dia todo, até 100 km</small></span></label>
+          </div>
+        </fieldset>
+
+        <div class="row">
+          <label>Data<input type="date" name="data" id="data" required></label>
+          <label>Horário para buscar<input type="time" name="hora" id="hora" required step="900"></label>
+        </div>
+        <p class="msg warn" id="conflito" hidden></p>
+
+        <label>Onde eu busco você<input type="text" name="partida" id="partida" required autocomplete="street-address" placeholder="Rua, número, bairro"></label>
+
+        <fieldset>
+          <legend>Para onde vamos</legend>
+          <div id="paradas"></div>
+          <button class="link-btn" type="button" id="add-parada">+ Adicionar outra parada</button>
+        </fieldset>
+
+        <label class="check"><input type="checkbox" name="voltarPartida" id="voltar" checked> No fim, voltar para o endereço onde fui buscado</label>
+        <label class="check"><input type="checkbox" name="pet" id="pet"> Vai levar pet de pequeno porte</label>
+
+        <fieldset>
+          <legend>Seus dados</legend>
+          <label>Nome<input type="text" name="nome" id="nome" autocomplete="name" required></label>
+          <div class="row">
+            <label>WhatsApp<input type="tel" name="telefone" id="telefone" autocomplete="tel" required placeholder="(51) 9...."></label>
+            <label>E-mail (opcional)<input type="email" name="email" id="email" autocomplete="email"></label>
+          </div>
+          <label>Observações (opcional)<textarea name="obs" id="obs" placeholder="Ex.: cadeira de rodas, criança de 8 anos, consulta com hora marcada"></textarea></label>
+          <p class="hint">Seus dados vão só para mim. No calendário do site aparece apenas o horário ocupado.</p>
+        </fieldset>
+
+        <div class="actions">
+          <button class="btn btn-ghost" type="button" id="calcular">Calcular valor</button>
+          <button class="btn btn-solid" type="submit" id="enviar">Enviar pedido</button>
+        </div>
+
+        <div class="msg err" id="erro" role="alert" hidden></div>
+        <div class="quote" id="cotacao" hidden aria-live="polite"></div>
+        <div class="msg ok" id="sucesso" hidden></div>
+      </form>
+    </section>
+  </div>
+</main>
+
+<template id="tpl-parada">
+  <div class="stop">
+    <div class="stop-head"><span class="stop-n"></span><button class="link-btn rm" type="button">Remover</button></div>
+    <label>Endereço<input type="text" class="p-end" required placeholder="Clínica, mercado, endereço..."></label>
+    <div class="row">
+      <label>O que eu faço lá
+        <select class="p-modo">
+          <option value="esperar">Espero no carro</option>
+          <option value="acompanhar">Acompanho você</option>
+          <option value="deixar">Só deixo (sem esperar)</option>
+        </select>
+      </label>
+      <label class="p-tempo-l">Quanto tempo
+        <select class="p-min">
+          <option value="30">30 min</option><option value="60" selected>1 h</option><option value="90">1h30</option>
+          <option value="120">2 h</option><option value="150">2h30</option><option value="180">3 h</option>
+          <option value="210">3h30</option><option value="240">4 h</option><option value="300">5 h</option>
+          <option value="360">6 h</option><option value="480">8 h</option>
+        </select>
+      </label>
+    </div>
+    <p class="hint p-aviso" hidden>Espera acima de 4h: eu volto para casa e busco você depois (cobra nova saída + km em vez da espera).</p>
+  </div>
+</template>
+
+<script>
+// Endereço do Apps Script publicado (veja COMO-INSTALAR.md). Vazio = modo demonstração.
+const API_URL = '';
+const WHATSAPP_RENATA = '5551982059136';
+
+// Tabela aprovada em 15/10/2026. Mesma regra de apps-script/Codigo.gs.
+const PRECOS = {
+  saida: 35, porKm: 5.70, esperaGratisMin: 30, esperaPorHora: 30, esperaMaxMin: 240,
+  acompPorHora: 45, acompMinimoMin: 60, petPorTrecho: 20, adicionalNoiteDomingoFeriado: 0.20,
+  pacote8h: 850, pacoteKmIncluidos: 100, pacoteKmExtra: 2.50,
+};
+
+function calcularPreco(dados, km, saidas, voltasParaCasa) {
+  const itens = [];
+  const trechosComCliente = dados.paradas.length + (dados.voltarPartida ? 1 : 0);
+  if (dados.tipo === 'pacote') {
+    itens.push({ nome: 'Pacotão 8 horas (até ' + PRECOS.pacoteKmIncluidos + ' km)', valor: PRECOS.pacote8h });
+    const extra = Math.max(0, km - PRECOS.pacoteKmIncluidos);
+    if (extra > 0) itens.push({ nome: 'Km extra (' + arred(extra, 1) + ' km)', valor: extra * PRECOS.pacoteKmExtra });
+  } else {
+    itens.push({ nome: 'Saída' + (saidas > 1 ? 's (' + saidas + ')' : ''), valor: PRECOS.saida * saidas });
+    itens.push({ nome: 'Deslocamento (' + arred(km, 1) + ' km)', valor: km * PRECOS.porKm });
+    dados.paradas.forEach((p, i) => {
+      const min = Number(p.minutos) || 0;
+      if (p.modo === 'esperar' && voltasParaCasa.indexOf(i) === -1) {
+        const cobrado = Math.max(0, min - PRECOS.esperaGratisMin);
+        if (cobrado > 0) itens.push({ nome: 'Espera na parada ' + (i + 1), valor: cobrado / 60 * PRECOS.esperaPorHora });
+      }
+      if (p.modo === 'acompanhar') {
+        itens.push({ nome: 'Acompanhamento na parada ' + (i + 1), valor: Math.max(min, PRECOS.acompMinimoMin) / 60 * PRECOS.acompPorHora });
+      }
+    });
+  }
+  if (dados.pet) itens.push({ nome: 'Pet pequeno (' + trechosComCliente + ' trechos)', valor: trechosComCliente * PRECOS.petPorTrecho });
+  const subtotal = itens.reduce((s, i) => s + i.valor, 0);
+  if (temAdicional(dados.data, dados.hora)) {
+    itens.push({ nome: 'Adicional noite / domingo / feriado (20%)', valor: subtotal * PRECOS.adicionalNoiteDomingoFeriado });
+  }
+  itens.forEach(i => { i.valor = arred(i.valor, 2); });
+  return { itens, total: Math.round(itens.reduce((s, i) => s + i.valor, 0)) };
+}
+function temAdicional(data, hora) {
+  const h = Number(hora.split(':')[0]);
+  if (h >= 20 || h < 6) return true;
+  const [a, m, d] = data.split('-').map(Number);
+  return new Date(a, m - 1, d).getDay() === 0 || ehFeriado(a, m, d);
+}
+function ehFeriado(a, m, d) {
+  const fixos = ['01-01', '04-21', '05-01', '09-07', '09-20', '10-12', '11-02', '11-15', '11-20', '12-25', '02-02'];
+  if (fixos.includes(String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0'))) return true;
+  const pascoa = domingoDePascoa(a), alvo = new Date(a, m - 1, d).getTime();
+  return [-48, -47, -2, 60].some(off => { const x = new Date(pascoa); x.setDate(x.getDate() + off); return x.getTime() === alvo; });
+}
+function domingoDePascoa(a) {
+  const b = a % 19, c = Math.floor(a / 100), d = a % 100, e = Math.floor(c / 4), f = c % 4;
+  const g = Math.floor((c + 8) / 25), h = Math.floor((c - g + 1) / 3);
+  const i = (19 * b + c - e - h + 15) % 30, k = Math.floor(d / 4), l = d % 4;
+  const m = (32 + 2 * f + 2 * k - i - l) % 7, n = Math.floor((b + 11 * i + 22 * m) / 451);
+  return new Date(a, Math.floor((i + m - 7 * n + 114) / 31) - 1, ((i + m - 7 * n + 114) % 31) + 1);
+}
+const arred = (n, c) => Math.round(n * 10 ** c) / 10 ** c;
+const brl = n => Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+const dataBR = s => s.split('-').reverse().join('/');
+const $ = id => document.getElementById(id);
+
+// ---------- Servidor (ou demonstração) ----------
+const DEMO = !API_URL;
+if (DEMO) $('demo').hidden = false;
+
+function demoAgenda() {
+  const hoje = new Date(), d = n => { const x = new Date(hoje); x.setDate(x.getDate() + n); return iso(x); };
+  return { ok: true, ocupacoes: [
+    { data: d(2), inicio: '08:10', fim: '12:40', status: 'reservado' },
+    { data: d(2), inicio: '15:30', fim: '18:00', status: 'em_reserva' },
+    { data: d(5), inicio: '09:00', fim: '17:30', status: 'reservado' },
+    { data: d(9), inicio: '13:20', fim: '16:00', status: 'em_reserva' },
+  ] };
+}
+function demoCotar(dados) {
+  // Estimativa grosseira: 9 km por trecho. No site real os km vêm do Google Maps.
+  const trechos = 2 + dados.paradas.length + (dados.voltarPartida ? 1 : 0);
+  const voltas = dados.paradas.map((p, i) => p.modo === 'esperar' && p.minutos > PRECOS.esperaMaxMin ? i : -1).filter(i => i >= 0);
+  const km = trechos * 9 + voltas.length * 18;
+  const parado = dados.paradas.reduce((s, p) => s + (p.modo === 'deixar' ? 0 : Number(p.minutos)), 0);
+  const [h, m] = dados.hora.split(':').map(Number);
+  const dirigindo = trechos * 15;
+  const hh = x => String(Math.floor(x / 60)).padStart(2, '0') + ':' + String(x % 60).padStart(2, '0');
+  return { ok: true, km, inicio: hh(Math.max(0, h * 60 + m - 15)), fim: hh(Math.min(1439, h * 60 + m + dirigindo - 15 + parado)), preco: calcularPreco(dados, km, 1 + voltas.length, voltas) };
+}
+
+async function api(acao, dados) {
+  if (DEMO) {
+    await new Promise(r => setTimeout(r, 300));
+    if (acao === 'agenda') return demoAgenda();
+    if (acao === 'cotar') return demoCotar(dados);
+    if (acao === 'pedir') { const c = demoCotar(dados); return { ok: true, id: 'DEMO', inicio: c.inicio, fim: c.fim, km: c.km, total: c.preco.total }; }
+  }
+  let res;
+  if (acao === 'pedir') {
+    res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(Object.assign({ acao }, dados)) });
+  } else {
+    const q = new URLSearchParams({ acao });
+    if (dados) q.set('dados', JSON.stringify(dados));
+    res = await fetch(API_URL + '?' + q);
+  }
+  const json = await res.json();
+  if (!json.ok) throw new Error(json.erro || 'Não foi possível falar com o servidor.');
+  return json;
+}
+
+// ---------- Calendário ----------
+let ocupacoes = [];
+const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+let mesAtual = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+let diaSel = null;
+
+function desenharCalendario() {
+  const nomeMes = mesAtual.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+  $('mes').textContent = nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1);
+  $('prev').disabled = mesAtual <= new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+  const cal = $('cal');
+  cal.innerHTML = '';
+  ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].forEach((t, i) => {
+    const el = document.createElement('div');
+    el.className = 'dow'; el.textContent = t;
+    el.title = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][i];
+    cal.appendChild(el);
+  });
+  for (let i = 0; i < mesAtual.getDay(); i++) cal.appendChild(document.createElement('div'));
+  const dias = new Date(mesAtual.getFullYear(), mesAtual.getMonth() + 1, 0).getDate();
+  for (let d = 1; d <= dias; d++) {
+    const data = new Date(mesAtual.getFullYear(), mesAtual.getMonth(), d);
+    const id = iso(data);
+    const doDia = ocupacoes.filter(o => o.data === id);
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'day' + (id === iso(hoje) ? ' today' : '') + (id === diaSel ? ' sel' : '');
+    b.disabled = data < hoje;
+    const resumo = doDia.length ? doDia.map(o => o.status === 'reservado' ? 'reservado' : 'em reserva').join(', ') : 'livre';
+    b.setAttribute('aria-label', data.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' }) + ', ' + resumo);
+    b.innerHTML = '<span class="n">' + d + '</span><span class="dots">' + doDia.map(o => '<i class="dot ' + o.status + '"></i>').join('') + '</span>';
+    b.addEventListener('click', () => escolherDia(id));
+    cal.appendChild(b);
+  }
+}
+
+function escolherDia(id) {
+  diaSel = id;
+  $('data').value = id;
+  desenharCalendario();
+  mostrarDia(id);
+  verificarConflito();
+}
+
+function mostrarDia(id) {
+  const doDia = ocupacoes.filter(o => o.data === id).sort((a, b) => a.inicio.localeCompare(b.inicio));
+  const titulo = new Date(id + 'T12:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+  $('day-info').innerHTML = '<h3>' + titulo.charAt(0).toUpperCase() + titulo.slice(1) + '</h3>' + (doDia.length
+    ? '<ul class="slots">' + doDia.map(o => '<li class="slot ' + o.status + '"><span>' + o.inicio + ' às ' + o.fim + '</span><span>' + (o.status === 'reservado' ? 'Reservado' : 'Em reserva') + '</span></li>').join('') + '</ul><p class="muted" style="margin-top:8px">Fora desses horários o dia está livre.</p>'
+    : '<p class="muted">Dia todo livre.</p>');
+}
+
+$('prev').addEventListener('click', () => { mesAtual.setMonth(mesAtual.getMonth() - 1); desenharCalendario(); });
+$('next').addEventListener('click', () => { mesAtual.setMonth(mesAtual.getMonth() + 1); desenharCalendario(); });
+
+async function carregarAgenda() {
+  try { ocupacoes = (await api('agenda')).ocupacoes; }
+  catch (e) { $('day-info').innerHTML = '<p class="muted">Não consegui carregar a agenda agora. Você ainda pode fazer o pedido.</p>'; }
+  desenharCalendario();
+  if (diaSel) mostrarDia(diaSel);
+}
+
+// ---------- Paradas ----------
+function addParada() {
+  const n = $('paradas').children.length;
+  if (n >= 15) return;
+  const el = $('tpl-parada').content.firstElementChild.cloneNode(true);
+  el.querySelector('.rm').addEventListener('click', () => { el.remove(); renumerar(); limparCotacao(); });
+  const modo = el.querySelector('.p-modo'), min = el.querySelector('.p-min');
+  const atualizar = () => {
+    el.querySelector('.p-tempo-l').hidden = modo.value === 'deixar';
+    el.querySelector('.p-aviso').hidden = !(modo.value === 'esperar' && Number(min.value) > PRECOS.esperaMaxMin);
+  };
+  modo.addEventListener('change', atualizar); min.addEventListener('change', atualizar);
+  $('paradas').appendChild(el);
+  renumerar(); atualizar();
+}
+function renumerar() {
+  [...$('paradas').children].forEach((el, i, all) => {
+    el.querySelector('.stop-n').textContent = 'Parada ' + (i + 1);
+    el.querySelector('.rm').hidden = all.length === 1;
+  });
+}
+$('add-parada').addEventListener('click', addParada);
+addParada();
+
+// ---------- Cotação e pedido ----------
+function lerForm(paraPedido) {
+  const f = $('form');
+  const dados = {
+    tipo: f.tipo.value, data: $('data').value, hora: $('hora').value, partida: $('partida').value.trim(),
+    paradas: [...$('paradas').children].map(el => ({
+      endereco: el.querySelector('.p-end').value.trim(),
+      modo: el.querySelector('.p-modo').value,
+      minutos: el.querySelector('.p-modo').value === 'deixar' ? 0 : Number(el.querySelector('.p-min').value),
+    })),
+    voltarPartida: $('voltar').checked, pet: $('pet').checked,
+    nome: $('nome').value.trim(), telefone: $('telefone').value.trim(), email: $('email').value.trim(), obs: $('obs').value.trim(),
+  };
+  const faltando = [];
+  if (!dados.data) faltando.push('data');
+  else if (dados.data < iso(hoje)) faltando.push('uma data a partir de hoje');
+  if (!dados.hora) faltando.push('horário');
+  if (!dados.partida) faltando.push('onde buscar');
+  if (dados.paradas.some(p => !p.endereco)) faltando.push('endereço de todas as paradas');
+  if (paraPedido) { if (!dados.nome) faltando.push('nome'); if (!dados.telefone) faltando.push('WhatsApp'); }
+  if (faltando.length) throw new Error('Preencha: ' + faltando.join(', ') + '.');
+  return dados;
+}
+
+function mostrarErro(msg) { $('erro').textContent = msg; $('erro').hidden = !msg; }
+function limparCotacao() { $('cotacao').hidden = true; }
+
+function mostrarCotacao(c, dados) {
+  $('cotacao').innerHTML = '<table>' + c.preco.itens.map(i => '<tr><td>' + i.nome + '</td><td>R$ ' + brl(i.valor) + '</td></tr>').join('') +
+    '<tr class="total"><td>Total estimado</td><td>R$ ' + brl(c.preco.total) + '</td></tr></table>' +
+    '<p class="hint" style="margin-top:8px">Rota de ' + brl(c.km).replace(',00', '') + ' km saindo da minha casa e voltando. Ocupo das ' + c.inicio + ' às ' + c.fim + ' de ' + dataBR(dados.data) + '. O valor final é confirmado por mim.</p>';
+  $('cotacao').hidden = false;
+}
+
+function verificarConflito() {
+  const data = $('data').value, el = $('conflito');
+  const doDia = ocupacoes.filter(o => o.data === data);
+  el.hidden = !doDia.length;
+  if (doDia.length) el.textContent = 'Neste dia já tenho: ' + doDia.map(o => o.inicio + ' às ' + o.fim + (o.status === 'reservado' ? ' (reservado)' : ' (em reserva)')).join('; ') + '. Escolha um horário fora desses, ou envie assim mesmo e eu vejo se dá.';
+}
+$('data').addEventListener('change', () => { if ($('data').value) { diaSel = $('data').value; const [a, m] = diaSel.split('-').map(Number); mesAtual = new Date(a, m - 1, 1); desenharCalendario(); mostrarDia(diaSel); } verificarConflito(); });
+$('form').addEventListener('input', limparCotacao);
+
+async function ocupado(btn, fn) {
+  const txt = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Aguarde...';
+  try { await fn(); } catch (e) { mostrarErro(e.message); } finally { btn.disabled = false; btn.textContent = txt; }
+}
+
+$('calcular').addEventListener('click', () => ocupado($('calcular'), async () => {
+  mostrarErro(''); $('sucesso').hidden = true;
+  const dados = lerForm(false);
+  mostrarCotacao(await api('cotar', dados), dados);
+}));
+
+$('form').addEventListener('submit', ev => {
+  ev.preventDefault();
+  ocupado($('enviar'), async () => {
+    mostrarErro(''); $('sucesso').hidden = true;
+    const dados = lerForm(true);
+    const r = await api('pedir', dados);
+    const texto = mensagemWhatsApp(dados, r);
+    $('sucesso').innerHTML = '<p style="margin:0 0 10px"><strong>Pedido enviado!</strong> Total estimado de R$ ' + brl(r.total) + '. Agora me mande a mensagem pronta no WhatsApp para eu ver mais rápido:</p>' +
+      '<a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/' + WHATSAPP_RENATA + '?text=' + encodeURIComponent(texto) + '">Abrir conversa no WhatsApp</a>';
+    $('sucesso').hidden = false;
+    $('sucesso').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    carregarAgenda();
+  });
+});
+
+function mensagemWhatsApp(d, r) {
+  const modo = { deixar: 'só deixar', esperar: 'esperar no carro', acompanhar: 'acompanhar' };
+  const linhas = [
+    'Olá, Renata! Fiz um pedido pelo site' + (r.id && r.id !== 'DEMO' ? ' (nº ' + r.id + ')' : '') + '.',
+    '',
+    '*' + (d.tipo === 'pacote' ? 'Pacotão 8 horas' : 'Corrida') + '*',
+    'Data: ' + dataBR(d.data) + ' às ' + d.hora,
+    'Buscar em: ' + d.partida,
+  ];
+  d.paradas.forEach((p, i) => linhas.push((i + 1) + ') ' + p.endereco + ' (' + modo[p.modo] + (p.modo === 'deixar' ? '' : ', ' + (p.minutos >= 60 ? (p.minutos / 60).toString().replace('.5', 'h30').replace(/^(\d+)$/, '$1h') : p.minutos + ' min')) + ')'));
+  if (d.voltarPartida) linhas.push('Volta para o endereço de partida');
+  if (d.pet) linhas.push('Vou levar pet pequeno 🐾');
+  if (d.obs) linhas.push('Obs.: ' + d.obs);
+  linhas.push('', 'Valor estimado: R$ ' + brl(r.total) + ' (' + r.km + ' km)', '', d.nome + ' · ' + d.telefone);
+  return linhas.join('\n');
+}
+
+carregarAgenda();
+</script>
+</body>
+</html>
