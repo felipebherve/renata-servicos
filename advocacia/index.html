@@ -34,6 +34,13 @@ body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f
 a { color: inherit; }
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
 .fio { height: 2px; background: var(--gold-grad); }
+/* Página emoldurada: duas barras douradas acompanham a página de cima a baixo */
+body { background: #080e18; }
+.pagina { position: relative; max-width: 1280px; margin-inline: auto; background: var(--bg); padding-inline: 6px; }
+.pagina::before, .pagina::after { content: ""; position: absolute; top: 0; bottom: 0; width: 6px; pointer-events: none; z-index: 1;
+  background: linear-gradient(to bottom, #8f6d33, #e3c98d 12%, #a8843f 30%, #ead19a 50%, #9c7a3a 70%, #e3c98d 88%, #8a6830); }
+.pagina::before { left: 0; }
+.pagina::after { right: 0; }
 
 /* Cabeçalho */
 .topo { text-align: center; padding-block: 28px 24px; }
@@ -46,7 +53,7 @@ a { color: inherit; }
 .destaque { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border: 1px solid var(--gold-deep); }
 .destaque-foto { margin: 0; min-height: 420px; position: relative; }
 .destaque-foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; display: block; }
-.destaque-painel { background: var(--gold-grad); color: var(--gold-ink); display: grid; align-content: center; gap: 26px; padding: clamp(28px, 5vw, 56px); }
+.destaque-painel { background: #c9a65e url("img/fundo-dourado.jpg") center / cover no-repeat; color: var(--gold-ink); display: grid; align-content: center; gap: 26px; padding: clamp(28px, 5vw, 56px); }
 .destaque-painel h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(32px, 4.2vw, 50px); line-height: 1.08; margin: 0; text-wrap: balance; }
 .destaque-painel p { margin: 0; font-size: 17px; max-width: 34ch; color: #2a2010; }
 
@@ -65,14 +72,14 @@ a { color: inherit; }
 .titulo-sub { text-align: center; color: var(--ink-soft); margin: 0 auto 44px; max-width: 56ch; }
 .areas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 44px 32px; margin: 0; padding: 0; list-style: none; }
 .area { text-align: center; display: grid; justify-items: center; align-content: start; gap: 12px; }
-.icone { width: 76px; height: 76px; border-radius: 50%; background: var(--gold-grad); display: grid; place-items: center; box-shadow: 0 0 0 1px var(--gold-deep), 0 8px 22px rgba(0,0,0,.35); }
-.icone svg { width: 36px; height: 36px; color: #2a1f0c; }
+.icone { width: 104px; height: 104px; border-radius: 50%; display: block; box-shadow: 0 10px 26px rgba(0,0,0,.45); }
 .area h3 { font-family: var(--font-display); font-weight: 600; font-size: 22px; line-height: 1.15; letter-spacing: .02em; color: var(--gold); margin: 6px 0 0; padding-bottom: 10px; border-bottom: 1px solid var(--gold-deep); }
 .area p { margin: 0; color: var(--ink-soft); font-size: 15.5px; max-width: 30ch; }
 
 /* Sobre */
-.sobre { background: var(--panel); border-block: 1px solid var(--gold-deep); }
-.sobre .wrap { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+/* Fundo de mármore escuro; um véu por cima deixa o texto fácil de ler */
+.sobre { background: linear-gradient(rgba(8,10,14,.62), rgba(8,10,14,.62)), #0b0b0b url("img/fundo-marmore.jpg") center / cover no-repeat; border-block: 1px solid var(--gold-deep); }
+.sobre .wrap { max-width: 900px; }
 .sobre .titulo { text-align: left; }
 .sobre-lead { font-family: var(--font-display); font-size: clamp(21px, 2.2vw, 25px); line-height: 1.3; color: var(--ink); margin: 0 0 22px; font-style: italic; }
 .sobre-texto p { margin: 0 0 16px; max-width: 66ch; }
@@ -80,12 +87,7 @@ a { color: inherit; }
 .sobre-texto ul { margin: 0 0 22px; padding-left: 20px; display: grid; gap: 12px; max-width: 66ch; }
 .sobre-texto li::marker { color: var(--gold); }
 .sobre-texto strong { color: var(--gold); font-weight: 600; }
-.sobre-foto { margin: 0; border: 1px solid var(--gold-deep); padding: 8px; background: var(--bg); position: sticky; top: 24px; }
-.sobre-foto img { width: 100%; height: auto; display: block; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 20%; }
 
-/* Contato */
-.contato { text-align: center; }
-.contato .acoes { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 8px; }
 .rodape { border-top: 1px solid var(--line); padding-block: 24px 32px; color: var(--ink-soft); font-size: 14.5px; }
 .rodape .wrap { display: flex; flex-wrap: wrap; gap: 10px 28px; justify-content: center; align-items: center; }
 .rodape a { text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
@@ -112,8 +114,6 @@ dialog.form::backdrop { background: rgba(5, 9, 16, .72); }
 
 @media (max-width: 900px) {
   .areas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .sobre .wrap { grid-template-columns: minmax(0, 1fr); }
-  .sobre-foto { position: static; max-width: 420px; order: -1; }
 }
 @media (max-width: 720px) {
   .destaque { grid-template-columns: minmax(0, 1fr); }
@@ -123,11 +123,11 @@ dialog.form::backdrop { background: rgba(5, 9, 16, .72); }
 @media (max-width: 520px) {
   .areas { grid-template-columns: minmax(0, 1fr); gap: 36px; }
   .form-acoes { grid-template-columns: minmax(0, 1fr); }
-  .contato .btn { width: 100%; }
 }
 </style>
 </head>
 <body>
+<div class="pagina">
 <div class="fio"></div>
 <header class="topo">
   <a class="marca" href="./" aria-label="Renata B. Hervé, Advocacia e Consultoria Jurídica, início">
@@ -162,32 +162,32 @@ dialog.form::backdrop { background: rgba(5, 9, 16, .72); }
       <p class="titulo-sub">Soluções extrajudiciais e consultoria para resolver a sua questão com segurança e sem complicação.</p>
       <ul class="areas">
         <li class="area">
-          <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 3.5 6 6M12 6l6 6M9.5 9.5l5 5M8 4l12 12M3 21l7.5-7.5"/><path d="M3 21h9"/></svg></span>
+          <img class="icone" src="img/pin-divorcios.webp" alt="" width="160" height="160">
           <h3>Divórcios &amp; Inventários Extrajudiciais</h3>
           <p>Casos amigáveis resolvidos em cartório. Organização dos documentos e minuta da escritura. Rápido e eficiente.</p>
         </li>
         <li class="area">
-          <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span>
+          <img class="icone" src="img/pin-contratos.webp" alt="" width="160" height="160">
           <h3>Contratos Simples</h3>
           <p>Análise e elaboração de contratos de locação, prestação de serviços, compra e venda e termos de uso.</p>
         </li>
         <li class="area">
-          <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 12h6M10 15.5h6M10 19h4"/></svg></span>
+          <img class="icone" src="img/pin-consumidor.webp" alt="" width="160" height="160">
           <h3>Direito do Consumidor</h3>
           <p>Problemas com voos, negativação indevida e cobranças abusivas de telefonia, bancos e outros serviços.</p>
         </li>
         <li class="area">
-          <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="5.5"/><path d="M10 14.5v-5h2.2a1.6 1.6 0 0 1 0 3.2H10"/></svg></span>
+          <img class="icone" src="img/pin-inpi.webp" alt="" width="160" height="160">
           <h3>Registro de Marcas no INPI</h3>
           <p>Pedido e acompanhamento do registro da sua marca, para pequenas empresas e criadores.</p>
         </li>
         <li class="area">
-          <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 7h14"/><path d="m5 7-3 7a3.5 3.5 0 0 0 6 0z"/><path d="m19 7-3 7a3.5 3.5 0 0 0 6 0z"/><path d="M8 21h8"/></svg></span>
+          <img class="icone" src="img/pin-cobranca.webp" alt="" width="160" height="160">
           <h3>Cobrança Extrajudicial</h3>
           <p>Negociação direta e resolutiva para reaver valores de forma rápida, sem longos processos judiciais.</p>
         </li>
         <li class="area">
-          <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m2 12 4-4 4 2 3-3h3l6 5"/><path d="m22 12-4 4-2-1-3 3-2-1-1 1-6-6"/><path d="m10 10 3 3"/></svg></span>
+          <img class="icone" src="img/pin-dividas.webp" alt="" width="160" height="160">
           <h3>Negociação Extrajudicial de Dívidas</h3>
           <p>Notificações e negociação direta para quitar ou renegociar dívidas sem precisar ir à Justiça.</p>
         </li>
@@ -211,17 +211,9 @@ dialog.form::backdrop { background: rgba(5, 9, 16, .72); }
         </ul>
         <p>Seja para resolver pendências com leveza ou para proteger os seus direitos, estou aqui para estender a mão e oferecer o suporte jurídico que você merece.</p>
       </div>
-      <figure class="sobre-foto"><img src="../img/renata.jpg" alt="" width="896" height="1195" loading="lazy"></figure>
     </div>
   </section>
 
-  <section class="secao contato" id="contato" aria-labelledby="contato-titulo">
-    <div class="wrap">
-      <h2 class="titulo" id="contato-titulo">Vamos conversar?</h2>
-      <p class="titulo-sub">Conte a sua situação e eu retorno pelo WhatsApp ou por e-mail.</p>
-      <div class="acoes"><button type="button" class="btn btn-ouro" data-abrir-form>Entre em contato!</button></div>
-    </div>
-  </section>
 </main>
 
 <footer class="rodape">
@@ -231,6 +223,7 @@ dialog.form::backdrop { background: rgba(5, 9, 16, .72); }
     <span>Atendimento em Porto Alegre e região</span>
   </div>
 </footer>
+</div>
 
 <dialog class="form" id="form-contato" aria-labelledby="form-titulo">
   <form class="form-corpo" method="dialog" novalidate>
