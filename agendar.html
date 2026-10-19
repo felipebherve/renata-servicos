@@ -97,6 +97,8 @@ textarea { resize: vertical; min-height: 70px; }
 .check { flex-direction: row; align-items: center; gap: 10px; font-weight: 500; }
 .check input { width: 20px; height: 20px; }
 .stop { border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px; background: var(--bg); }
+.stop-final { margin-top: 8px; }
+.final-end { margin: 0; font-size: 15px; overflow-wrap: anywhere; }
 .stop-head { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 14px; }
 .stop .row { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
 .link-btn { background: none; border: 0; color: var(--accent); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; padding: 4px 0; text-decoration: underline; text-underline-offset: 3px; }
@@ -207,6 +209,10 @@ details.tabela ul { padding-left: 18px; margin: 10px 0 0; color: var(--ink-soft)
         <fieldset>
           <legend>Para onde vamos</legend>
           <div id="paradas"></div>
+          <div class="stop stop-final" id="parada-final" hidden>
+            <div class="stop-head"><span>Final</span></div>
+            <p class="final-end">Volta para: <strong id="final-endereco"></strong></p>
+          </div>
           <button class="link-btn" type="button" id="add-parada">+ Adicionar outra parada</button>
         </fieldset>
 
@@ -450,12 +456,24 @@ function addParada() {
   $('paradas').appendChild(el);
   renumerar(); atualizar();
 }
+// Nomes das paradas: a primeira é o Início e a última é o Final. Se a pessoa volta para onde foi buscada,
+// o Final é esse endereço, mostrado num cartão próprio no fim da lista.
+function nomeParada(i, total, volta) {
+  if (i === 0) return 'Início';
+  if (i === total - 1 && !volta) return 'Final';
+  return 'Parada ' + (i + 1);
+}
 function renumerar() {
+  const volta = $('voltar').checked;
   [...$('paradas').children].forEach((el, i, all) => {
-    el.querySelector('.stop-n').textContent = 'Parada ' + (i + 1);
+    el.querySelector('.stop-n').textContent = nomeParada(i, all.length, volta);
     el.querySelector('.rm').hidden = all.length === 1;
   });
+  $('parada-final').hidden = !volta;
+  $('final-endereco').textContent = $('partida').value.trim() || 'o endereço onde fui buscado';
 }
+$('voltar').addEventListener('change', renumerar);
+$('partida').addEventListener('input', renumerar);
 $('add-parada').addEventListener('click', addParada);
 addParada();
 
@@ -538,8 +556,8 @@ function mensagemWhatsApp(d, r) {
     'Data: ' + dataBR(d.data) + ' às ' + d.hora,
     'Buscar em: ' + d.partida,
   ];
-  d.paradas.forEach((p, i) => linhas.push((i + 1) + ') ' + p.endereco + ' (' + modo[p.modo] + (p.modo === 'deixar' ? '' : ', ' + (p.minutos >= 60 ? (p.minutos / 60).toString().replace('.5', 'h30').replace(/^(\d+)$/, '$1h') : p.minutos + ' min')) + ')'));
-  if (d.voltarPartida) linhas.push('Volta para o endereço de partida');
+  d.paradas.forEach((p, i) => linhas.push(nomeParada(i, d.paradas.length, d.voltarPartida) + ': ' + p.endereco + ' (' + modo[p.modo] + (p.modo === 'deixar' ? '' : ', ' + (p.minutos >= 60 ? (p.minutos / 60).toString().replace('.5', 'h30').replace(/^(\d+)$/, '$1h') : p.minutos + ' min')) + ')'));
+  if (d.voltarPartida) linhas.push('Final: volta para ' + d.partida);
   if (d.pet) linhas.push('Vou levar pet pequeno 🐾');
   if (d.obs) linhas.push('Obs.: ' + d.obs);
   linhas.push('', 'Valor estimado: R$ ' + brl(r.total) + ' (' + r.km + ' km)', '', d.nome + ' · ' + d.telefone);
