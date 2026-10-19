@@ -101,6 +101,12 @@ textarea { resize: vertical; min-height: 70px; }
 .final-end { margin: 0; font-size: 15px; overflow-wrap: anywhere; }
 .stop-head { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 14px; }
 .stop .row { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+.stop .row.end-row { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
+.achado { font-size: 13px; margin: -4px 0 0; color: var(--ink-soft); overflow-wrap: anywhere; }
+.achado.ruim { color: inherit; background: var(--busy-bg); border-radius: 8px; padding: 6px 8px; margin: 0; }
+.conferir { list-style: none; padding: 0; margin: 8px 0 12px; display: flex; flex-direction: column; gap: 6px; font-size: 15px; overflow-wrap: anywhere; }
+.conferir b { font-weight: 700; }
+.conferir-acoes { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .link-btn { background: none; border: 0; color: var(--accent); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; padding: 4px 0; text-decoration: underline; text-underline-offset: 3px; }
 .hint { font-size: 13px; color: var(--ink-soft); margin: 0; }
 .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 24px; border-radius: 999px; font: inherit; font-weight: 600; font-size: 15.5px; border: 1.5px solid var(--accent); cursor: pointer; text-decoration: none; }
@@ -204,10 +210,16 @@ details.tabela ul { padding-left: 18px; margin: 10px 0 0; color: var(--ink-soft)
         </div>
         <p class="msg warn" id="conflito" hidden></p>
 
-        <label>Onde eu busco você<input type="text" name="partida" id="partida" required autocomplete="street-address" placeholder="Rua, número, bairro"></label>
-
         <fieldset>
           <legend>Para onde vamos</legend>
+          <div class="stop" id="parada-inicio">
+            <div class="stop-head"><span>Início</span><span class="hint">Onde eu busco você</span></div>
+            <div class="row end-row">
+              <label>Endereço<input type="text" name="partida" id="partida" required autocomplete="street-address" placeholder="Rua, número, bairro"></label>
+              <label>Cidade<input type="text" id="partida-cidade" class="p-cid" required list="cidades-rs" value="Porto Alegre" autocomplete="address-level2"></label>
+            </div>
+            <p class="achado" hidden></p>
+          </div>
           <div id="paradas"></div>
           <div class="stop stop-final" id="parada-final" hidden>
             <div class="stop-head"><span>Final</span></div>
@@ -239,6 +251,11 @@ details.tabela ul { padding-left: 18px; margin: 10px 0 0; color: var(--ink-soft)
         <div class="quote" id="cotacao" hidden aria-live="polite"></div>
         <div class="msg ok" id="sucesso" hidden></div>
       </form>
+      <datalist id="cidades-rs">
+        <option value="Porto Alegre"><option value="Canoas"><option value="Viamão"><option value="Alvorada"><option value="Cachoeirinha">
+        <option value="Gravataí"><option value="Guaíba"><option value="Eldorado do Sul"><option value="Esteio"><option value="Sapucaia do Sul">
+        <option value="São Leopoldo"><option value="Novo Hamburgo">
+      </datalist>
     </section>
   </div>
 </main>
@@ -246,7 +263,11 @@ details.tabela ul { padding-left: 18px; margin: 10px 0 0; color: var(--ink-soft)
 <template id="tpl-parada">
   <div class="stop">
     <div class="stop-head"><span class="stop-n"></span><button class="link-btn rm" type="button">Remover</button></div>
-    <label>Endereço<input type="text" class="p-end" required placeholder="Clínica, mercado, endereço..."></label>
+    <div class="row end-row">
+      <label>Endereço<input type="text" class="p-end" required placeholder="Clínica, mercado, endereço..."></label>
+      <label>Cidade<input type="text" class="p-cid" required list="cidades-rs" value="Porto Alegre"></label>
+    </div>
+    <p class="achado" hidden></p>
     <div class="row">
       <label>O que eu faço lá
         <select class="p-modo">
@@ -453,16 +474,43 @@ function addParada() {
     el.querySelector('.p-aviso').hidden = !(modo.value === 'esperar' && Number(min.value) > PRECOS.esperaMaxMin);
   };
   modo.addEventListener('change', atualizar); min.addEventListener('change', atualizar);
+  ligarConferencia(el);
   $('paradas').appendChild(el);
   renumerar(); atualizar();
 }
-// Nomes das paradas: a primeira é o Início e a última é o Final. Se a pessoa volta para onde foi buscada,
-// o Final é esse endereço, mostrado num cartão próprio no fim da lista.
+// O Início é o endereço onde eu busco a pessoa (sem espera). Depois vêm as paradas, e a última é o Final.
+// Se a pessoa volta para onde foi buscada, o Final é o endereço do Início, num cartão próprio no fim da lista.
 function nomeParada(i, total, volta) {
-  if (i === 0) return 'Início';
   if (i === total - 1 && !volta) return 'Final';
   return 'Parada ' + (i + 1);
 }
+
+// Endereço completo com a cidade (sempre no RS), para o Google Maps não achar a rua em outro estado.
+function enderecoCompleto(end, cidade) {
+  end = end.trim(); cidade = cidade.trim();
+  if (!end) return '';
+  if (!cidade || end.toLowerCase().includes(cidade.toLowerCase())) return end;
+  return end + ', ' + cidade + ' - RS';
+}
+function enderecoDoBloco(el) { return enderecoCompleto(el.querySelector('input[type=text]').value, el.querySelector('.p-cid').value); }
+
+// Ao sair do campo, mostra como o Google Maps entendeu o endereço, para a pessoa conferir.
+function conferirBloco(el) {
+  const achado = el.querySelector('.achado'), texto = enderecoDoBloco(el);
+  clearTimeout(el._t);
+  achado.hidden = true; achado.classList.remove('ruim');
+  if (!texto || DEMO) return;
+  el._t = setTimeout(async () => {
+    try {
+      const r = await (await fetch(API_URL + '?' + new URLSearchParams({ acao: 'localizar', endereco: texto }))).json();
+      if (enderecoDoBloco(el) !== texto) return;
+      if (r.ok && r.encontrado) { achado.textContent = 'Encontrei: ' + r.encontrado; achado.hidden = false; }
+      else if (!r.ok && r.erro) { achado.textContent = r.erro; achado.classList.add('ruim'); achado.hidden = false; }
+    } catch (e) { /* sem conexão: a conferência acontece no Calcular valor */ }
+  }, 300);
+}
+function ligarConferencia(el) { el.querySelectorAll('input[type=text]').forEach(i => i.addEventListener('change', () => conferirBloco(el))); }
+ligarConferencia($('parada-inicio'));
 function renumerar() {
   const volta = $('voltar').checked;
   [...$('paradas').children].forEach((el, i, all) => {
@@ -470,10 +518,10 @@ function renumerar() {
     el.querySelector('.rm').hidden = all.length === 1;
   });
   $('parada-final').hidden = !volta;
-  $('final-endereco').textContent = $('partida').value.trim() || 'o endereço onde fui buscado';
+  $('final-endereco').textContent = enderecoDoBloco($('parada-inicio')) || 'o endereço do Início';
 }
 $('voltar').addEventListener('change', renumerar);
-$('partida').addEventListener('input', renumerar);
+$('parada-inicio').addEventListener('input', renumerar);
 $('add-parada').addEventListener('click', addParada);
 addParada();
 
@@ -481,9 +529,9 @@ addParada();
 function lerForm(paraPedido) {
   const f = $('form');
   const dados = {
-    tipo: f.tipo.value, data: $('data').value, hora: $('hora').value, partida: $('partida').value.trim(),
+    tipo: f.tipo.value, data: $('data').value, hora: $('hora').value, partida: enderecoDoBloco($('parada-inicio')),
     paradas: [...$('paradas').children].map(el => ({
-      endereco: el.querySelector('.p-end').value.trim(),
+      endereco: enderecoDoBloco(el),
       modo: el.querySelector('.p-modo').value,
       minutos: el.querySelector('.p-modo').value === 'deixar' ? 0 : Number(el.querySelector('.p-min').value),
     })),
@@ -494,15 +542,36 @@ function lerForm(paraPedido) {
   if (!dados.data) faltando.push('data');
   else if (dados.data < iso(hoje)) faltando.push('uma data a partir de hoje');
   if (!dados.hora) faltando.push('horário');
-  if (!dados.partida) faltando.push('onde buscar');
+  if (!dados.partida) faltando.push('endereço do Início');
   if (dados.paradas.some(p => !p.endereco)) faltando.push('endereço de todas as paradas');
+  if ([...$('form').querySelectorAll('.p-cid')].some(i => !i.value.trim())) faltando.push('a cidade de cada endereço');
   if (paraPedido) { if (!dados.nome) faltando.push('nome'); if (!dados.telefone) faltando.push('WhatsApp'); }
   if (faltando.length) throw new Error('Preencha: ' + faltando.join(', ') + '.');
   return dados;
 }
 
 function mostrarErro(msg) { $('erro').textContent = msg; $('erro').hidden = !msg; }
-function limparCotacao() { $('cotacao').hidden = true; }
+let confirmado = false;
+function limparCotacao() { $('cotacao').hidden = true; confirmado = false; }
+
+const KM_MAXIMO = 300;
+const esc = t => String(t).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]);
+
+// Antes do valor, a pessoa confere cada endereço como foi encontrado (ou como foi digitado, com a cidade).
+function mostrarConferencia(c, dados) {
+  if (c.km > KM_MAXIMO) throw new Error('A rota deu ' + Math.round(c.km) + ' km, o que não parece certo. Confira o endereço e a cidade de cada parada, ou fale comigo no WhatsApp.');
+  const e = c.enderecos || {}, achados = e.paradas || [];
+  const linhas = [['Início', e.partida || dados.partida]].concat(dados.paradas.map((p, i) => [nomeParada(i, dados.paradas.length, dados.voltarPartida), achados[i] || p.endereco]));
+  if (dados.voltarPartida) linhas.push(['Final', 'volta para ' + (e.partida || dados.partida)]);
+  $('cotacao').innerHTML = '<p style="margin:0"><strong>Confira os endereços</strong></p>' +
+    '<p class="hint">' + (c.enderecos ? 'Foi assim que o Google Maps encontrou cada um:' : 'É assim que vou procurar cada um no mapa:') + '</p>' +
+    '<ol class="conferir">' + linhas.map(l => '<li><b>' + l[0] + ':</b> ' + esc(l[1]) + '</li>').join('') + '</ol>' +
+    '<div class="conferir-acoes"><button class="btn btn-solid" type="button" id="confirmar">Sim, estão certos</button><button class="link-btn" type="button" id="corrigir">Corrigir</button></div>';
+  $('cotacao').hidden = false;
+  $('confirmar').addEventListener('click', () => { confirmado = true; mostrarCotacao(c, dados); });
+  $('corrigir').addEventListener('click', () => { limparCotacao(); $('partida').focus(); });
+  $('confirmar').focus();
+}
 
 function mostrarCotacao(c, dados) {
   $('cotacao').innerHTML = '<table>' + c.preco.itens.map(i => '<tr><td>' + i.nome + '</td><td>R$ ' + brl(i.valor) + '</td></tr>').join('') +
@@ -529,7 +598,7 @@ async function ocupado(btn, fn) {
 $('calcular').addEventListener('click', () => ocupado($('calcular'), async () => {
   mostrarErro(''); $('sucesso').hidden = true;
   const dados = lerForm(false);
-  mostrarCotacao(await api('cotar', dados), dados);
+  mostrarConferencia(await api('cotar', dados), dados);
 }));
 
 $('form').addEventListener('submit', ev => {
@@ -537,6 +606,7 @@ $('form').addEventListener('submit', ev => {
   ocupado($('enviar'), async () => {
     mostrarErro(''); $('sucesso').hidden = true;
     const dados = lerForm(true);
+    if (!confirmado) throw new Error('Antes de enviar, clique em "Calcular valor" e confirme os endereços.');
     const r = await api('pedir', dados);
     const texto = mensagemWhatsApp(dados, r);
     $('sucesso').innerHTML = '<p style="margin:0 0 10px"><strong>Pedido enviado!</strong> Total estimado de R$ ' + brl(r.total) + '. Agora me mande a mensagem pronta no WhatsApp para eu ver mais rápido:</p>' +
@@ -554,7 +624,7 @@ function mensagemWhatsApp(d, r) {
     '',
     '*' + (d.tipo === 'pacote' ? 'Pacotão 8 horas' : 'Corrida') + '*',
     'Data: ' + dataBR(d.data) + ' às ' + d.hora,
-    'Buscar em: ' + d.partida,
+    'Início (buscar em): ' + d.partida,
   ];
   d.paradas.forEach((p, i) => linhas.push(nomeParada(i, d.paradas.length, d.voltarPartida) + ': ' + p.endereco + ' (' + modo[p.modo] + (p.modo === 'deixar' ? '' : ', ' + (p.minutos >= 60 ? (p.minutos / 60).toString().replace('.5', 'h30').replace(/^(\d+)$/, '$1h') : p.minutos + ' min')) + ')'));
   if (d.voltarPartida) linhas.push('Final: volta para ' + d.partida);
