@@ -107,6 +107,15 @@ h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(40px, 
 .service svg { width: 36px; height: 36px; color: var(--accent); }
 .service h3 { margin: 0; font-size: 18px; font-weight: 600; }
 .service p { margin: 0; color: var(--ink-soft); font-size: 15px; }
+.juridico { display: flex; align-items: center; justify-content: space-between; gap: 18px 32px; flex-wrap: wrap; margin-top: 40px; padding: clamp(22px, 4vw, 34px) clamp(20px, 4vw, 40px); border: 2px solid #d3b26c; border-radius: 4px; color: #f3ead8; text-decoration: none; background: linear-gradient(rgba(8,10,14,.62), rgba(8,10,14,.62)), #0b0b0b url("advocacia/img/fundo-marmore.jpg") center / cover no-repeat; transition: box-shadow .2s, border-color .2s; }
+.juridico:hover { border-color: #ead19a; box-shadow: 0 0 0 1px #ead19a, 0 10px 30px rgba(0,0,0,.35); }
+.juridico:focus-visible { outline: 2px solid #ead19a; outline-offset: 4px; }
+.juridico-texto { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.juridico-titulo { font-family: var(--font-display); font-size: clamp(24px, 3.2vw, 34px); line-height: 1.15; color: #e7cf98; }
+.juridico-nome { font-size: 16px; letter-spacing: .02em; }
+.juridico-oab { font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: #d3b26c; }
+.juridico-seta { flex: none; display: inline-flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 22px; border: 1.5px solid #d3b26c; color: #e7cf98; font-weight: 600; font-size: 15px; }
+.juridico-seta svg { width: 18px; height: 18px; }
 
 /* ---------- Seções provisórias ---------- */
 .contato { border-top: 1px solid var(--line); }
@@ -257,6 +266,14 @@ footer a { color: var(--ink-soft); }
           <p>Acompanho em consultas, fisioterapia, mercado, escola e passeios.</p>
         </li>
       </ul>
+      <a class="juridico" href="advocacia/">
+        <span class="juridico-texto">
+          <span class="juridico-titulo">Solicite Atendimento Jurídico</span>
+          <span class="juridico-nome">Dra. Renata Bruno Hervé, advogada</span>
+          <span class="juridico-oab">OAB/RS 73.516</span>
+        </span>
+        <span class="juridico-seta">Conhecer <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
     </div>
   </section>
 
