@@ -73,6 +73,13 @@ h2 { font-family: var(--font-display); font-weight: 400; font-size: 26px; margin
 .dot.reservado { background: var(--busy); }
 .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--ink-soft); margin-top: 14px; }
 .legend span { display: inline-flex; align-items: center; gap: 6px; }
+.carregando { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-height: 260px; text-align: center; color: var(--ink-soft); font-size: 15px; }
+.carregando[hidden] { display: none; }
+.spinner { width: 36px; height: 36px; border-radius: 50%; border: 4px solid var(--line); border-top-color: var(--accent); animation: girar .8s linear infinite; }
+@keyframes girar { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2.4s; } }
+.cal-aviso { margin: 10px 0 0; font-size: 14px; color: var(--ink-soft); }
+.cal-aviso[hidden] { display: none; }
 .day-info { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 14px; }
 .day-info h3 { margin: 0 0 8px; font-size: 16px; }
 .slots { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
@@ -169,7 +176,12 @@ details.tabela ul { padding-left: 18px; margin: 10px 0 0; color: var(--ink-soft)
         <strong id="mes" aria-live="polite"></strong>
         <button class="icon-btn" id="next" type="button" aria-label="Próximo mês">›</button>
       </div>
-      <div class="cal" id="cal" role="grid"></div>
+      <div class="carregando" id="cal-carregando" role="status">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Carregando os dias livres…</span>
+      </div>
+      <div class="cal" id="cal" role="grid" hidden></div>
+      <p class="cal-aviso" id="cal-aviso" role="alert" hidden>Não consegui carregar os dias ocupados agora. Você ainda pode fazer o pedido. <button class="link-btn" type="button" id="cal-tentar">Tentar de novo</button></p>
       <div class="legend">
         <span><i class="dot reservado"></i> Reservado</span>
         <span><i class="dot em_reserva"></i> Em reserva (aguardando confirmação)</span>
@@ -455,12 +467,20 @@ function mostrarDia(id) {
 $('prev').addEventListener('click', () => { mesAtual.setMonth(mesAtual.getMonth() - 1); desenharCalendario(); });
 $('next').addEventListener('click', () => { mesAtual.setMonth(mesAtual.getMonth() + 1); desenharCalendario(); });
 
-async function carregarAgenda() {
-  try { ocupacoes = (await api('agenda')).ocupacoes; }
-  catch (e) { $('day-info').innerHTML = '<p class="muted">Não consegui carregar a agenda agora. Você ainda pode fazer o pedido.</p>'; }
+// Enquanto a agenda não chega do servidor, o calendário mostra um aviso de carregando.
+// Se falhar, desenha o calendário sem marcas e oferece "Tentar de novo".
+async function carregarAgenda(comAviso) {
+  if (comAviso) { $('cal').hidden = true; $('cal-aviso').hidden = true; $('cal-carregando').hidden = false; }
+  let falhou = false;
+  try { ocupacoes = (await Promise.race([api('agenda'), new Promise((_, n) => setTimeout(() => n(new Error('demorou')), 25000))])).ocupacoes || []; }
+  catch (e) { falhou = true; }
+  $('cal-carregando').hidden = true;
+  $('cal').hidden = false;
+  $('cal-aviso').hidden = !falhou;
   desenharCalendario();
   if (diaSel) mostrarDia(diaSel);
 }
+$('cal-tentar').addEventListener('click', () => carregarAgenda(true));
 
 // ---------- Paradas ----------
 function addParada() {
@@ -634,7 +654,7 @@ function mensagemWhatsApp(d, r) {
   return linhas.join('\n');
 }
 
-carregarAgenda();
+carregarAgenda(true);
 </script>
 </body>
 </html>
