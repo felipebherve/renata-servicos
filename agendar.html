@@ -193,7 +193,7 @@ details.tabela ul { padding-left: 18px; margin: 10px 0 0; color: var(--ink-soft)
       <details class="tabela">
         <summary>Como o valor é calculado</summary>
         <ul>
-          <li>R$ 35 por saída + R$ 5,70 por km. A rota conta da minha casa (Hípica) até você, todas as paradas e a volta para casa.</li>
+          <li>Saída da minha casa até você: R$ 15 fixos, sem cobrar os km desse trecho. Depois, R$ 5,70 por km: de você por todas as paradas e a volta para minha casa (Hípica).</li>
           <li>Espera no carro: 30 min grátis por parada, depois R$ 30/h. Acima de 4h eu volto para casa e busco depois (nova saída + km).</li>
           <li>Acompanhamento em consultas, mercado, restaurante ou lojas: R$ 45/h (mínimo 1h).</li>
           <li>Pet pequeno: + R$ 20 por trecho.</li>
@@ -306,14 +306,16 @@ details.tabela ul { padding-left: 18px; margin: 10px 0 0; color: var(--ink-soft)
 const API_URL = 'https://script.google.com/macros/s/AKfycbxW3grIK98DrHry7F-TdtNjV6lLen7VbKQ3Rpuei2tn81vgfgQf_MEE-ggCYWq5jupUBw/exec';
 const WHATSAPP_RENATA = '5551982059136';
 
-// Tabela aprovada em 15/10/2026. Mesma regra de apps-script/Codigo.gs.
+// Tabela aprovada em 15/10/2026; saída de R$ 15 (sem km da casa até o cliente) desde 22/10/2026.
+// Mesma regra de apps-script/Codigo.gs.
 const PRECOS = {
-  saida: 35, porKm: 5.70, esperaGratisMin: 30, esperaPorHora: 30, esperaMaxMin: 240,
+  saida: 15, porKm: 5.70, esperaGratisMin: 30, esperaPorHora: 30, esperaMaxMin: 240,
   acompPorHora: 45, acompMinimoMin: 60, petPorTrecho: 20, adicionalNoiteDomingoFeriado: 0.20,
   pacote8h: 850, pacoteKmIncluidos: 100, pacoteKmExtra: 2.50,
 };
 
-function calcularPreco(dados, km, saidas, voltasParaCasa) {
+// kmAteCliente: km da casa da Renata até o endereço do Início. Esse trecho já está na saída e não paga km.
+function calcularPreco(dados, km, saidas, voltasParaCasa, kmAteCliente) {
   const itens = [];
   const trechosComCliente = dados.paradas.length + (dados.voltarPartida ? 1 : 0);
   if (dados.tipo === 'pacote') {
@@ -321,8 +323,9 @@ function calcularPreco(dados, km, saidas, voltasParaCasa) {
     const extra = Math.max(0, km - PRECOS.pacoteKmIncluidos);
     if (extra > 0) itens.push({ nome: 'Km extra (' + arred(extra, 1) + ' km)', valor: extra * PRECOS.pacoteKmExtra });
   } else {
-    itens.push({ nome: 'Saída' + (saidas > 1 ? 's (' + saidas + ')' : ''), valor: PRECOS.saida * saidas });
-    itens.push({ nome: 'Deslocamento (' + arred(km, 1) + ' km)', valor: km * PRECOS.porKm });
+    itens.push({ nome: 'Saída de casa até você' + (saidas > 1 ? ' (' + saidas + ' saídas)' : ''), valor: PRECOS.saida * saidas });
+    const kmCobrado = Math.max(0, km - (kmAteCliente || 0));
+    itens.push({ nome: 'Deslocamento (' + arred(kmCobrado, 1) + ' km)', valor: kmCobrado * PRECOS.porKm });
     dados.paradas.forEach((p, i) => {
       const min = Number(p.minutos) || 0;
       if (p.modo === 'esperar' && voltasParaCasa.indexOf(i) === -1) {
@@ -389,7 +392,7 @@ function demoCotar(dados) {
   const [h, m] = dados.hora.split(':').map(Number);
   const dirigindo = trechos * 15;
   const hh = x => String(Math.floor(x / 60)).padStart(2, '0') + ':' + String(x % 60).padStart(2, '0');
-  return { ok: true, km, inicio: hh(Math.max(0, h * 60 + m - 15)), fim: hh(Math.min(1439, h * 60 + m + dirigindo - 15 + parado)), preco: calcularPreco(dados, km, 1 + voltas.length, voltas) };
+  return { ok: true, km, inicio: hh(Math.max(0, h * 60 + m - 15)), fim: hh(Math.min(1439, h * 60 + m + dirigindo - 15 + parado)), preco: calcularPreco(dados, km, 1 + voltas.length, voltas, 9) };
 }
 
 async function api(acao, dados) {
