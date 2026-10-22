@@ -115,8 +115,8 @@ td small { display: block; color: var(--ink-soft); font-size: 14px; margin-top: 
         <table>
           <thead><tr><th scope="col">Item</th><th scope="col">Valor</th></tr></thead>
           <tbody>
-            <tr><td>Saída<small>Cada vez que eu saio de casa para atender você.</small></td><td>R$ 35</td></tr>
-            <tr><td>Deslocamento<small>Por km da rota completa (veja abaixo).</small></td><td>R$ 5,70/km</td></tr>
+            <tr><td>Saída<small>Da minha casa até você. Valor fixo, os km desse trecho não são cobrados.</small></td><td>R$ 15</td></tr>
+            <tr><td>Deslocamento<small>Por km a partir de você: paradas e volta para minha casa (veja abaixo).</small></td><td>R$ 5,70/km</td></tr>
             <tr><td>Espera no carro<small>Os primeiros 30 min de cada parada são grátis.</small></td><td>R$ 30/h</td></tr>
             <tr><td>Acompanhamento<small>Consultas, fisioterapia, mercado, restaurante, lojas. Mínimo de 1 hora.</small></td><td>R$ 45/h</td></tr>
             <tr><td>Pet de pequeno porte<small>Por trecho com o pet no carro.</small></td><td>+ R$ 20</td></tr>
@@ -130,7 +130,7 @@ td small { display: block; color: var(--ink-soft); font-size: 14px; margin-top: 
 
     <section aria-labelledby="t-rota">
       <h2 id="t-rota">Como eu conto os km</h2>
-      <p>O deslocamento conta a rota inteira: saio da minha casa, na Hípica, busco você, passo por todas as paradas e volto para casa. O site calcula essa distância sozinho quando você agenda.</p>
+      <p>O caminho da minha casa, na Hípica, até você já está na saída de R$ 15. Os km contam a partir daí: busco você, passo por todas as paradas e volto para casa. O site calcula essa distância sozinho quando você agenda.</p>
       <div class="rota" aria-label="Exemplo de rota">
         <span>Minha casa</span><i>→</i><span>Você</span><i>→</i><span>Paradas</span><i>→</i><span>Minha casa</span>
       </div>
@@ -139,12 +139,12 @@ td small { display: block; color: var(--ink-soft); font-size: 14px; margin-top: 
 
     <section class="exemplo" aria-labelledby="t-exemplo">
       <h2 id="t-exemplo">Exemplo de cálculo</h2>
-      <p class="muted">Consulta médica com acompanhamento de 1h30, rota completa de 22 km, numa quarta-feira de manhã. Valores de exemplo.</p>
+      <p class="muted">Consulta médica com acompanhamento de 1h30, numa quarta-feira de manhã. Da minha casa até você são 6 km, e de você até a consulta e de volta para minha casa são 16 km. Valores de exemplo.</p>
       <table>
-        <tr><td>Saída</td><td>R$ 35,00</td></tr>
-        <tr><td>Deslocamento (22 km × R$ 5,70)</td><td>R$ 125,40</td></tr>
+        <tr><td>Saída (minha casa até você)</td><td>R$ 15,00</td></tr>
+        <tr><td>Deslocamento (16 km × R$ 5,70)</td><td>R$ 91,20</td></tr>
         <tr><td>Acompanhamento (1h30 × R$ 45)</td><td>R$ 67,50</td></tr>
-        <tr class="total"><td>Total previsto</td><td>R$ 227,90</td></tr>
+        <tr class="total"><td>Total previsto</td><td>R$ 173,70</td></tr>
       </table>
     </section>
 
